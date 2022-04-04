@@ -6,8 +6,13 @@ import "./assets/css/nucleo-icons.css";
 import "./assets/css/nucleo-svg.css";
 import SoftUIDashboard from "./soft-ui-dashboard";
 
+
 const appInstance = createApp(App);
 appInstance.use(store);
 appInstance.use(router);
+// appInstance.use(Swal);
+
+// appInstance.use(Swal);
+// appInstance.use(Toast);
 appInstance.use(SoftUIDashboard);
 appInstance.mount("#app");
