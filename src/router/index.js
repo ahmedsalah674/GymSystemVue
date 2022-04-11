@@ -7,6 +7,7 @@ import Profile from "@/views/Profile.vue";
 import Rtl from "@/views/Rtl.vue";
 import SignIn from "@/views/SignIn.vue";
 import GymMembers from "@/views/GymMembers.vue";
+import GymManagers from "@/views/GymManagers.vue";
 import SignUp from "@/views/SignUp.vue";
 
 const routes = [{
@@ -24,6 +25,11 @@ const routes = [{
         path: "/GymMembers",
         name: "GymMembers",
         component: GymMembers,
+    },
+    {
+        path: "/GymManagers",
+        name: "GymManagers",
+        component: GymManagers,
     },
     {
         path: "/tables",
