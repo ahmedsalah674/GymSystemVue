@@ -20,6 +20,15 @@
         </sidenav-collapse>
       </li>
       <!-- ------------------------- -->
+      <!-- this tha link to gym managers -->
+      <li class="nav-item">
+        <sidenav-collapse navText="Gym Managers" :to="{ name: 'GymManagers' }">
+          <template v-slot:icon>
+            <icon name="GymManagers" />
+          </template>
+        </sidenav-collapse>
+      </li>
+      <!-- ------------------------- -->
       <li class="nav-item">
         <sidenav-collapse navText="Tables" :to="{ name: 'Tables' }">
           <template v-slot:icon>
