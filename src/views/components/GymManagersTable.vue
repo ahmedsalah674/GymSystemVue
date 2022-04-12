@@ -3,7 +3,7 @@
     <div class="card-header pb-0">
       <h6>Gym Managers</h6>
       <div class="card-tools">
-        <button class="btn btn-success" @click="newModal(true)" >
+        <button class="btn btn-success" @click="newModal(true)">
           Add New <i class="fas fa-user-plus fa-fw"></i>
         </button>
         <button
@@ -88,16 +88,16 @@
               <td class="align-middle">
                 {{ GymMember.email }}
               </td>
-             
+
               <td class="align-middle text-center">
-                <img
-                  :src="GymMember.avatar_image"
-                  width="50"
-                  height="50"
-                />
+                <img :src="GymMember.avatar_image" width="50" height="50" />
               </td>
               <td class="align-middle text-center">
-                <a href="#" style="color: blue" @click="editModal(GymMember, false)">
+                <a
+                  href="#"
+                  style="color: blue"
+                  @click="editModal(GymMember, false)"
+                >
                   <i class="fa fa-edit blue"></i>
                 </a>
               </td>
@@ -179,7 +179,7 @@
             <div class="form-group">
               <input
                 v-model="form.password"
-                v-show="isAddUser==true"
+                v-show="isAddUser == true"
                 placeholder="Pssword"
                 type="password"
                 name="password"
@@ -190,11 +190,10 @@
               <span v-if="errors.password" class="text-danger">{{
                 errors.password[0]
               }}</span>
-            </div> 
-             <div class="form-group">
+            </div>
+            <div class="form-group">
               <input
-             
-               v-show="isAddUser==true"
+                v-show="isAddUser == true"
                 v-model="form.password_confirmed"
                 type="password"
                 placeholder="Confirmed Password"
@@ -206,7 +205,7 @@
               <span v-if="errors.password_confirmed" class="text-danger">{{
                 errors.password_confirmed[0]
               }}</span>
-          </div>
+            </div>
             <div class="form-group">
               <div v-if="!image">
                 <h4>Select an image</h4>
@@ -219,15 +218,19 @@
                   class="form-control"
                   :class="{ 'is-invalid': errors.avatar_image }"
                 />
-               
               </div>
-              <div v-else >
+              <div v-else>
                 <img :src="image" width="200" height="200" />
-                <button class="btn btn-danger d-block btn-sm mt-2" @click="removeImage">Remove image</button>
+                <button
+                  class="btn btn-danger d-block btn-sm mt-2"
+                  @click="removeImage"
+                >
+                  Remove image
+                </button>
               </div>
-               <span v-if="errors.avatar_image" class="text-danger">{{
-                  errors.avatar_image[0]
-                }}</span>
+              <span v-if="errors.avatar_image" class="text-danger">{{
+                errors.avatar_image[0]
+              }}</span>
             </div>
           </div>
           <div class="modal-footer">
@@ -272,8 +275,8 @@ export default {
   data() {
     return {
       editmode: false,
-      isAddUser:false,
-      image: '',
+      isAddUser: false,
+      image: "",
       form: {
         id: "",
         name: "",
@@ -282,8 +285,8 @@ export default {
         password_confirmed: "",
         avatar_image: "",
       },
-      formTest:{
-          name: "",
+      formTest: {
+        name: "",
         email: "",
       },
       errors: {},
@@ -301,30 +304,42 @@ export default {
           console.log(e);
         });
     },
-    handleFileUpload:function(event) {
+    handleFileUpload: function (event) {
       this.form.avatar_image = event.target.files[0];
-       this.createImage(event.target.files[0]);
+      this.createImage(event.target.files[0]);
     },
-      createImage(file) {
+    createImage(file) {
       // var image = new Image();
       var reader = new FileReader();
       var vm = this;
-
       reader.onload = (e) => {
         vm.image = e.target.result;
       };
       reader.readAsDataURL(file);
     },
-      removeImage: function () {
-      this.image = '';
-      this.form.avatar_image="";
+    removeImage: function () {
+      this.image = "";
+      this.form.avatar_image = "";
     },
+
+
+
+
+
+
+
+
+
+
+
+
     createUser: function () {
-       // this.isAddUser=true;
+      // this.isAddUser=true;
       this.FrontVlidation();
       if (!Object.keys(this.errors).length) {
         let myform = this.$refs["myform"];
         let formData = new FormData(myform);
+        formData.append("avatar_image", this.form.avatar_image);
         let config = {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -337,8 +352,8 @@ export default {
               this.errors = response.data.error;
               console.log(this.errors);
             } else {
-              this.GymMembers.push(response.data)
-             // this.GymMembers = response.data;
+              this.GymMembers.push(response.data);
+              // this.GymMembers = response.data;
               Toast.fire({
                 icon: "success",
                 title: "Created successfully",
@@ -353,7 +368,7 @@ export default {
                 date_of_birth: "",
                 avatar_image: "",
               };
-              this.image="";
+              this.image = "";
               this.errors = [];
               myform.reset();
               this.$refs["closebtn"].click();
@@ -365,30 +380,35 @@ export default {
       }
     },
     updateUser: function () {
-      //  this.isAddUser=false;
+       this.isAddUser=false;
       this.FrontVlidation();
       if (!Object.keys(this.errors).length) {
         let myform = this.$refs["myform"];
-        let formData={
-            name:this.form.name,
-            email:this.form.email
-        }
+        let formData = new FormData();
+         console.log(this.form)
+        console.log(formData)
+        formData.append("avatar_image", this.form.avatar_image);
+        formData.append("email", this.form.email);
+        formData.append("name", this.form.name);
+        formData.append("id", this.form.id);
+       
         let config = {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         };
-        GymManagersService.update(this.form.id, formData, config)
+         GymManagersService.update(this.form.id, formData, config)
           .then((response) => {
+            console.log(response)
             if (response.data.error) {
               this.errors = response.data.errors;
               console.log(this.errors);
             } else if (response.status == 200) {
-              this.GymMembers.forEach(user => {
-                  if(user.id==this.form.id){
-                      user.name=this.form.name
-                      user.email=this.form.email
-                  }
+              this.GymMembers.forEach((user) => {
+                if (user.id == this.form.id) {
+                  user.name = this.form.name;
+                  user.email = this.form.email;
+                }
               });
               console.log(this.GymMembers);
               Toast.fire({
@@ -405,7 +425,7 @@ export default {
                 date_of_birth: "",
                 avatar_image: "",
               };
-              this.image="";
+              this.image = "";
               this.errors = [];
               myform.reset();
               this.$refs["closebtn"].click();
@@ -428,40 +448,44 @@ export default {
       }).then((result) => {
         if (result.isConfirmed) {
           GymManagersService.delete(userid).then((response) => {
-              console.log(response)
-            if (response.status==204) { //data.message == "deleted"
+            console.log(response);
+            if (response.status == 204) {
+              //data.message == "deleted"
               Swal.fire("Deleted!", "Your file has been deleted.", "success");
-              this.GymMembers = this.GymMembers.filter((user) => user.id != userid);
-            //   let targetid = 0;
-            //   for (let i = 0; i < this.GymMembers.length; i++) {
-            //     if (this.GymMembers[i].user_id == userid) {
-            //       targetid = i;
-            //       break;
-            //     }
-            //   }
-            //   this.GymMembers.splice(targetid, 1);
+              this.GymMembers = this.GymMembers.filter(
+                (user) => user.id != userid
+              );
+              //   let targetid = 0;
+              //   for (let i = 0; i < this.GymMembers.length; i++) {
+              //     if (this.GymMembers[i].user_id == userid) {
+              //       targetid = i;
+              //       break;
+              //     }
+              //   }
+              //   this.GymMembers.splice(targetid, 1);
             }
           });
         }
       });
     },
     editModal: function (GymMember, isAddUser) {
-        this.isAddUser=isAddUser;
+      this.isAddUser = isAddUser;
       this.editmode = true;
       let triggerModal = this.$refs["triggerModal"];
       triggerModal.click();
-      this.image="http://drive.google.com/uc?export=view&id=" +GymMember.avatar_image;
+      this.image =GymMember.avatar_image;
+        // "http://drive.google.com/uc?export=view&id=" + GymMember.avatar_image;
       this.form.id = GymMember.id;
       this.form.name = GymMember.name;
       this.form.email = GymMember.email;
-    //   this.form.password = GymMember.password;
-    //   this.form.password_confirmed = GymMember.password;
-    //   this.form.gender = GymMember.gender;
-    //   this.form.date_of_birth = GymMember.date_of_birth;
+      //   this.form.password = GymMember.password;
+      //   this.form.password_confirmed = GymMember.password;
+      //   this.form.gender = GymMember.gender;
+      //   this.form.date_of_birth = GymMember.date_of_birth;
       this.form.avatar_image = GymMember.avatar_image;
     },
     newModal(isAddUser) {
-        this.isAddUser=isAddUser;
+      this.isAddUser = isAddUser;
       this.editmode = false;
       let triggerModal = this.$refs["triggerModal"];
       triggerModal.click();
@@ -479,24 +503,24 @@ export default {
       } else if (!this.validEmail(this.form.email)) {
         this.errors["email"] = ["email should be a valid one"];
       }
-   
-    //   if (!this.form.password) {
-    //     this.errors["password"] = ["password is required"];
-    //   } else if (this.form.password.length < 8) {
-    //     this.errors["password"] = ["password must be at least 8 characters"];
-    //   }
-    //   if (!this.form.password_confirmed) {
-    //     this.errors["password_confirmed"] = ["password_confirmed is required"];
-    //   } else if (
-    //     this.form.password &&
-    //     this.form.password_confirmed != this.form.password
-    //   ) {
-    //     this.errors["password_confirmed"] = ["two password must be equal"];
-    //   }
 
-      if (!this.form.avatar_image) {
-        this.errors["avatar_image"] = ["avatar_image is required"];
-      }
+      //   if (!this.form.password) {
+      //     this.errors["password"] = ["password is required"];
+      //   } else if (this.form.password.length < 8) {
+      //     this.errors["password"] = ["password must be at least 8 characters"];
+      //   }
+      //   if (!this.form.password_confirmed) {
+      //     this.errors["password_confirmed"] = ["password_confirmed is required"];
+      //   } else if (
+      //     this.form.password &&
+      //     this.form.password_confirmed != this.form.password
+      //   ) {
+      //     this.errors["password_confirmed"] = ["two password must be equal"];
+      //   }
+
+      // if (!this.form.avatar_image) {
+      //   this.errors["avatar_image"] = ["avatar_image is required"];
+      // }
     },
     validEmail: function (email) {
       var emailRegExp =
