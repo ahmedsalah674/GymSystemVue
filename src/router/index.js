@@ -8,7 +8,10 @@ import Rtl from "@/views/Rtl.vue";
 import SignIn from "@/views/SignIn.vue";
 import GymMembers from "@/views/GymMembers.vue";
 import GymManagers from "@/views/GymManagers.vue";
+import CityManagers from "@/views/CityManagers.vue";
 import SignUp from "@/views/SignUp.vue";
+import addCityManager from "@/views/components/addCityManager.vue";
+import editCityManager from "@/views/components/editCityManager.vue";
 
 const routes = [{
         path: "/",
@@ -27,9 +30,25 @@ const routes = [{
         component: GymMembers,
     },
     {
+        path: "/citymanagers/create",
+        name: "addCityManager",
+        component: addCityManager,
+    },
+    {
+        path: "/citymanagers/:id/edit",
+        name: "editCityManager",
+        props:true,
+        component: editCityManager,
+    },
+    {
         path: "/GymManagers",
         name: "GymManagers",
         component: GymManagers,
+    },
+    {
+        path: "/citymanagers",
+        name: "CityManagers",
+        component: CityManagers,
     },
     {
         path: "/tables",

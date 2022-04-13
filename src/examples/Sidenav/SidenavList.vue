@@ -11,6 +11,14 @@
           </template>
         </sidenav-collapse>
       </li>
+      <!-- this tha link to gym members -->
+        <li class="nav-item">
+        <sidenav-collapse navText="City Managers" :to="{ name: 'CityManagers' }">
+          <template v-slot:icon>
+            <icon name="Users" />
+          </template>
+        </sidenav-collapse>
+      </li>
        <!-- this tha link to gym members -->
       <li class="nav-item">
         <sidenav-collapse navText="GymMembers" :to="{ name: 'GymMembers' }">
@@ -24,7 +32,7 @@
       <li class="nav-item">
         <sidenav-collapse navText="Gym Managers" :to="{ name: 'GymManagers' }">
           <template v-slot:icon>
-            <icon name="GymManagers" />
+            <icon name="Users" />
           </template>
         </sidenav-collapse>
       </li>

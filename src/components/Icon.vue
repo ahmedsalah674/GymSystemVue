@@ -57,9 +57,9 @@
 
   </svg>
   <!-- ---------------- -->
-  <!-- icon for GYM managersssssss -->
+  <!-- icon for users -->
 <svg
-  v-if="name === 'GymManagers'"
+  v-if="name === 'Users'"
     xmlns="http://www.w3.org/2000/svg"
     width="16"
     height="16"
@@ -77,7 +77,7 @@
     />
     <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
 
-    <title>Gym Managers</title>
+    <title>Users</title>
 
   </svg>
   <!--  -->
