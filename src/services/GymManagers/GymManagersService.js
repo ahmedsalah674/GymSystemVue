@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import http from "../../../http-common";
 class GymManagersService {
     getAll() {

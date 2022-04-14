@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { createRouter, createWebHistory } from "vue-router";
 import Dashboard from "@/views/Dashboard.vue";
 import Tables from "@/views/Tables.vue";
@@ -8,11 +9,14 @@ import Rtl from "@/views/Rtl.vue";
 import SignIn from "@/views/SignIn.vue";
 import GymMembers from "@/views/GymMembers.vue";
 import GymManagers from "@/views/GymManagers.vue";
+import TrainingSessions from "@/views/TrainingSessions.vue";
+import addTrainingSessions from "@/views/components/addTrainingSessions.vue";
 import CityManagers from "@/views/CityManagers.vue";
 import SignUp from "@/views/SignUp.vue";
 import addCityManager from "@/views/components/addCityManager.vue";
 import editCityManager from "@/views/components/editCityManager.vue";
 import CityTable from "@/views/components/CitiesTable.vue";
+import editTrainingSession from "@/views/components/editTrainingSession.vue";
 
 const routes = [{
         path: "/",
@@ -50,6 +54,22 @@ const routes = [{
         path: "/GymManagers",
         name: "GymManagers",
         component: GymManagers,
+    },
+    {
+        path: "/TrainingSessions",
+        name: "TrainingSessions",
+        component: TrainingSessions,
+    },
+    {
+        path: "/TrainingSessions/create",
+        name: "addTrainingSession",
+        component: addTrainingSessions,
+    },
+    {
+        path: "/TrainingSessions/:id/update",
+        name: "editTrainingSession",
+        props:true,
+        component: editTrainingSession,
     },
     {
         path: "/citymanagers",

@@ -36,6 +36,13 @@
           </template>
         </sidenav-collapse>
       </li>
+      <li class="nav-item">
+        <sidenav-collapse navText="Training Sessions" :to="{ name: 'TrainingSessions' }">
+          <template v-slot:icon>
+            <icon name="Users" />
+          </template>
+        </sidenav-collapse>
+      </li>
       <!-- ------------------------- -->
         <!-- this tha link to gym managers -->
       <li class="nav-item">
