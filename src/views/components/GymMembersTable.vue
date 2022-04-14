@@ -22,16 +22,7 @@
             <tr>
               <th
                 class="
-                  text-uppercase text-secondary text-xxs
-                  font-weight-bolder
-                  opacity-7
-                "
-              >
-                Id
-              </th>
-              <th
-                class="
-                  text-uppercase text-secondary text-xxs
+                  text-center text-uppercase text-secondary text-xxs
                   font-weight-bolder
                   opacity-7
                   ps-2
@@ -87,35 +78,32 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="GymMember in GymMembers" :key="GymMember.user.id">
-              <td class="align-middle">
-                {{ GymMember.user.id }}
+            <tr v-for="GymMember in GymMembers" :key="GymMember.id">
+              <td class="text-center align-middle">
+                {{ GymMember.name }}
               </td>
-              <td class="align-middle">
-                {{ GymMember.user.name }}
+              <td class="text-center align-middle">
+                {{ GymMember.email }}
               </td>
-              <td class="align-middle">
-                {{ GymMember.user.email }}
-              </td>
-              <td class="align-middle text-center">
+              <td class="text-center align-middle text-center">
                 {{ GymMember.gender }}
               </td>
-              <td class="align-middle text-center">
+              <td class="text-center align-middle text-center">
                 <img
-                  :src="getImageUrl(GymMember.user.avatar_image)"
+                  :src="GymMember.avatar_image"
                   width="50"
                   height="50"
                 />
               </td>
-              <td class="align-middle text-center">
+              <td class="text-center align-middle text-center">
                 <a href="#" style="color: blue" @click="editModal(GymMember)">
                   <i class="fa fa-edit blue"></i>
                 </a>
               </td>
-              <td class="align-middle text-center">
+              <td class="text-center align-middle text-center">
                 <a
                   href="#"
-                  @click="deleteUser(GymMember.user.id)"
+                  @click="deleteUser(GymMember.id)"
                   style="color: red"
                 >
                   <i class="fa fa-trash red"></i>
@@ -206,7 +194,7 @@
               }}</span>
             </div>
 
-            <div class="form-group">
+            <div v-if="!editmode" class="form-group">
               <input
                 v-model="form.password"
                 placeholder="Pssword"
@@ -220,7 +208,7 @@
                 errors.password[0]
               }}</span>
             </div>
-            <div class="form-group">
+            <div v-if="!editmode" class="form-group">
               <input
                 v-model="form.password_confirmed"
                 type="password"
@@ -249,7 +237,7 @@
                 errors.date_of_birth[0]
               }}</span>
             </div>
-            <div class="form-group">
+            <div v-if="!editmode" class="form-group">
               <div v-if="!image">
                 <h4>Select an image</h4>
                 <input
@@ -362,21 +350,23 @@ export default {
       this.FrontVlidation();
       if (!Object.keys(this.errors).length) {
         let myform = this.$refs["myform"];
-        let formData = new FormData(myform);
-        let config = {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        };
-        GymMemberService.create(formData, config)
+        let formData = new FormData();
+        formData.append("name", this.form.name);
+        formData.append("email", this.form.email);
+        formData.append("password", this.form.password);
+        formData.append("password_confirmed", this.form.password_confirmed);
+        formData.append("gender", this.form.gender);
+        formData.append("date_of_birth", this.form.date_of_birth);
+        formData.append("avatar_image", this.form.avatar_image);
+        GymMemberService.create(formData)
           .then((response) => {
             console.log(response);
             if (response.data.status == "error") {
               this.errors = response.data.errors;
               console.log(this.errors);
             } else if (response.data.status == "success") {
-              // this.GymMembers.push(response.data.data)
-              this.GymMembers = response.data.data;
+              this.GymMembers.push(response.data.data)
+              // this.GymMembers = response.data.data;
               Toast.fire({
                 icon: "success",
                 title: "Created successfully",
@@ -410,24 +400,27 @@ export default {
         formData.append("id", this.form.id);
         formData.append("name", this.form.name);
         formData.append("email", this.form.email);
-        formData.append("password", this.form.password);
-        formData.append("password_confirmed", this.form.password_confirmed);
+        // formData.append("password", this.form.password);
+        // formData.append("password_confirmed", this.form.password_confirmed);
         formData.append("gender", this.form.gender);
         formData.append("date_of_birth", this.form.date_of_birth);
-        formData.append("avatar_image", this.form.avatar_image);
-        let config = {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        };
-        GymMemberService.update(this.form.id, formData, config)
+        // formData.append("avatar_image", this.form.avatar_image);
+        GymMemberService.update(this.form.id, formData)
           .then((response) => {
+            console.log(response);
             if (response.data.status == "error") {
               this.errors = response.data.errors;
               console.log(this.errors);
             } else if (response.data.status == "success") {
-              this.GymMembers = response.data.data;
-              console.log(this.GymMembers);
+                this.GymMembers.forEach((user) => {
+                if (user.id == this.form.id) {
+                   user.name = this.form.name;
+                   user.email= this.form.email;
+                   user.date_of_birth= this.form.date_of_birth;
+                   user.gender = this.form.gender; 
+                }
+              });
+              console.log("GymMembers",this.GymMembers);
               Toast.fire({
                 icon: "success",
                 title: "updated successfully",
@@ -484,23 +477,20 @@ export default {
       this.editmode = true;
       let triggerModal = this.$refs["triggerModal"];
       triggerModal.click();
-      this.image="http://drive.google.com/uc?export=view&id=" +GymMember.user.avatar_image;
-      this.form.id = GymMember.user.id;
-      this.form.name = GymMember.user.name;
-      this.form.email = GymMember.user.email;
-      this.form.password = GymMember.user.password;
-      this.form.password_confirmed = GymMember.user.password;
+      this.image=GymMember.avatar_image;
+      this.form.id = GymMember.id;
+      this.form.name = GymMember.name;
+      this.form.email = GymMember.email;
+      // this.form.password = GymMember.password;
+      // this.form.password_confirmed = GymMember.password;
       this.form.gender = GymMember.gender;
       this.form.date_of_birth = GymMember.date_of_birth;
-      this.form.avatar_image = GymMember.user.avatar_image;
+      // this.form.avatar_image = GymMember.avatar_image;
     },
     newModal() {
       this.editmode = false;
       let triggerModal = this.$refs["triggerModal"];
       triggerModal.click();
-    },
-    getImageUrl(avatar_image_id) {
-      return "http://drive.google.com/uc?export=view&id=" + avatar_image_id;
     },
     FrontVlidation() {
       this.errors = {};
@@ -518,22 +508,19 @@ export default {
       if (!this.form.date_of_birth) {
         this.errors["date_of_birth"] = ["date_of_birth is required"];
       }
-      if (!this.form.password) {
+      if (!this.editmode&&!this.form.password) {
         this.errors["password"] = ["password is required"];
-      } else if (this.form.password.length < 8) {
+      } else if (!this.editmode&&this.form.password.length < 8) {
         this.errors["password"] = ["password must be at least 8 characters"];
       }
-      if (!this.form.password_confirmed) {
+      if (!this.editmode&&!this.form.password_confirmed) {
         this.errors["password_confirmed"] = ["password_confirmed is required"];
       } else if (
+        !this.editmode&&
         this.form.password &&
         this.form.password_confirmed != this.form.password
       ) {
         this.errors["password_confirmed"] = ["two password must be equal"];
-      }
-
-      if (!this.form.avatar_image) {
-        this.errors["avatar_image"] = ["avatar_image is required"];
       }
     },
     validEmail: function (email) {

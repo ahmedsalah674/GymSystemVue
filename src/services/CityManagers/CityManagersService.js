@@ -14,7 +14,7 @@ class CityManagersService {
         return http.get(`/citymanagers/${id}`);
     }
     create(data) {
-        console.log(data)
+        // console.log(data)
         return http.post("/citymanagers", data, this.config);
     }
     update(id, data) {
