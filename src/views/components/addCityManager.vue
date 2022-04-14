@@ -151,8 +151,10 @@ export default {
         formData.append("avatar_image", this.form.avatar_image);
         CityManagersService.create(formData)
           .then((response) => {
-            if (response.data.errors) {
-              this.errors = response.data.errors;
+            console.log("response",response);
+            if (response.data.error) {
+              this.errors = response.data.error;
+              console.log(this.errors);
             } else {
               Toast.fire({
                 icon: "success",
@@ -167,8 +169,12 @@ export default {
             }
           }).catch((err) => {
             console.log(err);
+            console.log("error");
           });
+      }else{
+        console.log(this.errors);
       }
+
     },
     formValidation: function()  {
       this.errors = {};
