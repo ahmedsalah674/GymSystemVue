@@ -4,13 +4,13 @@
     id="sidenav-collapse-main"
   >
     <ul class="navbar-nav">
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <sidenav-collapse navText="Dashboard" :to="{ name: 'Dashboard' }">
           <template v-slot:icon>
             <icon name="dashboard" />
           </template>
         </sidenav-collapse>
-      </li>
+      </li> -->
       <!-- this tha link to gym members -->
         <li class="nav-item">
         <sidenav-collapse navText="City Managers" :to="{ name: 'CityManagers' }">
@@ -31,6 +31,15 @@
       <!-- this tha link to gym managers -->
       <li class="nav-item">
         <sidenav-collapse navText="Gym Managers" :to="{ name: 'GymManagers' }">
+          <template v-slot:icon>
+            <icon name="Users" />
+          </template>
+        </sidenav-collapse>
+      </li>
+      <!-- ------------------------- -->
+        <!-- this tha link to gym managers -->
+      <li class="nav-item">
+        <sidenav-collapse navText="Cities" :to="{ name: 'Cities' }">
           <template v-slot:icon>
             <icon name="Users" />
           </template>
@@ -101,31 +110,31 @@
     </ul>
   </div>
   <div class="pt-3 mx-3 mt-3 sidenav-footer">
-    <sidenav-card
+    <!-- <sidenav-card
       :class="cardBg"
       textPrimary="Need Help?"
       textSecondary="Please check our docs"
       href="https://www.creative-tim.com/learning-lab/vue/overview/soft-ui-dashboard/"
       linkText="Documentation"
       iconClass="ni ni-diamond"
-    />
-    <a
+    /> -->
+    <!-- <a
       class="btn bg-gradient-success mt-4 w-100"
       href="https://www.creative-tim.com/product/vue-soft-ui-dashboard-pro?ref=vsud"
       type="button"
       >Upgrade to pro</a
-    >
+    > -->
   </div>
 </template>
 <script>
 import Icon from "@/components/Icon.vue";
 import SidenavCollapse from "./SidenavCollapse.vue";
-import SidenavCard from "./SidenavCard.vue";
+// import SidenavCard from "./SidenavCard.vue";
 
 export default {
   name: "SidenavList",
   props: {
-    cardBg: String,
+    // cardBg: String,
   },
   data() {
     return {
@@ -137,7 +146,7 @@ export default {
   components: {
     Icon,
     SidenavCollapse,
-    SidenavCard,
+    // SidenavCard,
   },
   methods: {
     getRoute() {

@@ -12,6 +12,7 @@ import CityManagers from "@/views/CityManagers.vue";
 import SignUp from "@/views/SignUp.vue";
 import addCityManager from "@/views/components/addCityManager.vue";
 import editCityManager from "@/views/components/editCityManager.vue";
+import CityTable from "@/views/components/CitiesTable.vue";
 
 const routes = [{
         path: "/",
@@ -28,6 +29,11 @@ const routes = [{
         path: "/GymMembers",
         name: "GymMembers",
         component: GymMembers,
+    },
+    {
+        path: "/cities",
+        name: "Cities",
+        component: CityTable,
     },
     {
         path: "/citymanagers/create",
