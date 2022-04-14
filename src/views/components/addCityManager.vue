@@ -1,5 +1,10 @@
 <template>
-  <form @submit.prevent="submit" ref="form" autocomplete="off" enctype="multipart/form-data">
+  <form
+    @submit.prevent="submit"
+    ref="form"
+    autocomplete="off"
+    enctype="multipart/form-data"
+  >
     <div class="mb-3 form-group">
       <label for="name" class="form-label">Name</label>
       <input
@@ -54,7 +59,9 @@
         id="password_confirmation"
         :class="{ 'is-invalid': errors.password_confirmation }"
       />
-      <span v-if="errors.password_confirmation">{{ errors.password_confirmation }}</span>
+      <span v-if="errors.password_confirmation">{{
+        errors.password_confirmation
+      }}</span>
     </div>
 
     <div class="mb-3 form-group" v-if="!formImage">
@@ -114,7 +121,14 @@ export default {
       errors: {},
       formImage: "",
       // token: "2|6kfynCaHfYggdULaqx7Kl5NEwvWIi465094zlUCF",
-      form: {id: "",name: "",email: "",password: "",password_confirmation: "",avatar_image: ""},
+      form: {
+        id: "",
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
+        avatar_image: "",
+      },
     };
   },
   methods: {
@@ -146,7 +160,7 @@ export default {
 
     submit: function () {
       this.formValidation();
-      if (!Object.keys(this.errors).length) { 
+      if (!Object.keys(this.errors).length) {
         let formData = new FormData(this.$refs["form"]);
         formData.append("avatar_image", this.form.avatar_image);
         CityManagersService.create(formData)
@@ -158,32 +172,43 @@ export default {
                 icon: "success",
                 title: "Created successfully",
               });
-              this.form = {id: "",name: "",email: "",password: "",password_confirmed: "",avatar_image: "",cityName: ""};
+              this.form = {
+                id: "",
+                name: "",
+                email: "",
+                password: "",
+                password_confirmed: "",
+                avatar_image: "",
+                cityName: "",
+              };
               this.image = "";
               this.errors = [];
               this.$refs["myform"].reset();
               formData.delete("avatar_image");
               this.removeImage();
             }
-          }).catch((err) => {
+          })
+          .catch((err) => {
             console.log(err);
           });
       }
     },
-    formValidation: function()  {
+    formValidation: function () {
       this.errors = {};
       for (const key in this.form) {
-        if (key!='avatar_image'&& key!='id' &&this.form[key] === "") {
+        if (key != "avatar_image" && key != "id" && this.form[key] === "") {
           this.errors[key] = "This field is required";
         }
       }
       if (this.form.password.length < 8) {
-        this.errors["password"] = "password must be at least 8 characters or numbers";
+        this.errors["password"] =
+          "password must be at least 8 characters or numbers";
       } else if (
         this.form.password &&
         this.form.password_confirmation != this.form.password
       ) {
-        this.errors["password_confirmation"] = "password confirmation must be same as password";
+        this.errors["password_confirmation"] =
+          "password confirmation must be same as password";
       }
     },
   },
