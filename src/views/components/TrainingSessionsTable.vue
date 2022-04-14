@@ -48,7 +48,7 @@
                 </button>
               </td>
               <td class="text-center text-center">
-                <router-link :to="'/TrainingSessions/' + TrainingSession.id + '/edit'">
+                <router-link :to="'/TrainingSessions/' + TrainingSession.id + '/update'">
                   <i class="fa fa-edit blue"></i>
                 </router-link>
               </td>

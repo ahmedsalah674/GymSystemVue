@@ -6,20 +6,6 @@
     autocomplete="off"
     enctype="multipart/form-data"
   >
-    <div class="mb-3 form-group">
-      <label for="name" class="form-label">Name</label>
-      <input
-        v-model="form.name"
-        type="text"
-        class="form-control"
-        id="name"
-        name="name"
-        :class="{ 'is-invalid': errors.name }"
-      />
-      <span v-if="errors.name">
-        {{ errors.name }}
-      </span>
-    </div>
 
     <div class="mb-3 form-group">
       <label for="day" class="form-label">Date</label>
@@ -61,58 +47,7 @@
       <span v-if="errors.end_time">{{ errors.end_time }}</span>
     </div>
 
-    <div class="mb-3 form-group">
-      <label for="coaches" class="form-label">Select Coaches</label>
-      <select @change="functionz" class="form-control" name="coaches" id="coaches" :class="{ 'is-invalid': errors.coaches }">
-        <option disabled>Select coach</option>
-        <option v-for="coach in coaches" :key="coach.id" :value="coach.id">
-          {{ coach.name }}
-        </option>
-      </select>
-      <span v-if="errors.coaches">{{ errors.coaches }}</span>
-    </div>
-
-    <div class="mb-3 form-group">
-      <label for="coaches" class="form-label">Select Gym</label>
-      <select v-model="form.gym_id" class="form-control" name="gym" id="gym" :class="{ 'is-invalid': errors.gym }">
-        <option disabled>Select gym</option>
-        <option v-for="gym in gyms" :key="gym.id" :value="gym.id">
-          {{ gym.name }}
-        </option>
-      </select>
-      <span v-if="errors.gyms">{{ errors.gyms }}</span>
-    </div>
-
-    <!-- <div class="mb-3 form-group" v-if="!formImage">
-      <label for="avatar_image" class="form-label">User image</label>
-      <input
-        @change="handleFileUpload($event)"
-        class="form-control"
-        placeholder="avatar_image"
-        name="avatar_image"
-        type="file"
-        id="avatar_image"
-        :class="{ 'is-invalid': errors.avatar_image }"
-      />
-      <span v-if="errors.avatar_image">{{ errors.avatar_image }}</span>
-    </div>
-    <div v-else class="justify-content-center">
-      <img :src="formImage" width="200" height="200" />
-      <button class="btn btn-danger d-block btn-sm mt-2" @click="removeImage">
-        Remove image
-      </button>
-    </div> -->
-
-    <!-- <div class="mb-3 form-group">
-      <label for="role" class="form-label">Role</label>
-      <select class="form-control" name="role" id="role" :class="{ 'is-invalid': errors.role }">
-        <option value="">Select role</option>
-        <option value="admin">Admin</option>
-        <option value="city_manager">City manager</option>
-        <option value="user">User</option>
-      </select> -->
-
-    <button type="submit" class="btn btn-primary">Add</button>
+    <button type="submit" class="btn btn-primary">Edit</button>
   </form>
 </template>
 <script>
@@ -121,8 +56,6 @@
 // import VsudBadge from "@/components/VsudBadge.vue";
 // import { Form, Field, ErrorMessage } from "vee-validate";]
 import TrainingSessionsService from "../../services/GymManagers/TrainingSessionService";
-import CoachService from "../../services/Coaches/CoachesService";
-import GymService from "../../services/Gym/GymService";
 import Swal from "sweetalert2";
 const Toast = Swal.mixin({
   toast: true,
@@ -136,95 +69,68 @@ const Toast = Swal.mixin({
   },
 });
 export default {
-  name: "add/edit-session",
+  name: "edit-session",
   data() {
     return {
       editmode: false,
       errors: {},
       // token: "2|6kfynCaHfYggdULaqx7Kl5NEwvWIi465094zlUCF",
       form: {
-        name: "",
+        id: this.$route.params.id,
         session_date: "",
         start_time: "",
         end_time: "",
-        coaches: [],
-        gym_id: "",
       },
-      coaches: [],
-      gyms: [],
+      sessions: [],
     };
   },
   methods: {
+    getSession:function(){
+      TrainingSessionsService.get(this.form.id).then((response) => {
+          if(response.data.error){
+            console.log("not found message");
+          }
+          this.form.session_date = response.data.session_date;
+          this.form.start_time = response.data.start_time;
+          this.form.end_time = response.data.end_time;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     submit: function () {
       this.formValidation();
-      console.log(Object.keys(this.errors).length);
-      console.log(this.form.gym_id);
       if (!(Object.keys(this.errors).length > 0)) {
-        TrainingSessionsService.create(this.form)
-          .then((response) => {
+        TrainingSessionsService.update(this.form.id,this.form).then((response) => {
             if (response.data.error) {
+              console.log(response.data.error);
               this.errors = response.data.error;
             } else {
               Toast.fire({
                 icon: "success",
-                title: "Created successfully",
+                title: "Updated successfully",
               });
-              this.form = {
-                name: "",
-                session_date: "",
-                start_time: "",
-                end_time: "",
-                coaches: [],
-                gym_id: "",
-              };
-              this.errors = [];
-              this.$refs["form"].reset();
               setTimeout(() => {
-                this.$router.push("/TrainingSessions");
+              this.$router.push("/TrainingSessions");
               }, 3000);
             }
           })
           .catch((err) => {
             console.log(err);
           });
-      }else{
-        console.log(this.errors);
       }
     },
     formValidation: function () {
       this.errors = {};
       for (const key in this.form) {
-        if (key != "id" && this.form[key] === "") {
+        if (this.form[key] === "") {
           this.errors[key] = "This " + key + "field is required";
         }
       }
     },
-    getCoaches: function () {
-      CoachService.getAll()
-        .then((response) => {
-          this.coaches = response.data;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    getGyms: function () {
-      GymService.getAll()
-        .then((response) => {
-          this.gyms = response.data;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    functionz: function (e) {
-      console.log(e.target.value);
-      this.form.coaches.push(e.target.value);
-    },
   },
   created() {
-    this.getCoaches();
-    this.getGyms();
+    this.getSession();
   },
 };
 </script>

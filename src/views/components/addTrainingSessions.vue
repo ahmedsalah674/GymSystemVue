@@ -63,12 +63,18 @@
 
     <div class="mb-3 form-group">
       <label for="coaches" class="form-label">Select Coaches</label>
-      <select @change="functionz" class="form-control" name="coaches" id="coaches" :class="{ 'is-invalid': errors.coaches }">
+      <Multiselect
+        v-model="form.coaches"
+        mode="multiple"
+        :close-on-select="false"
+        :options="coaches"
+      ></Multiselect>
+      <!-- <select @change="functionz" class="form-control" name="coaches" id="coaches" multiple :class="{ 'is-invalid': errors.coaches }">
         <option disabled>Select coach</option>
         <option v-for="coach in coaches" :key="coach.id" :value="coach.id">
           {{ coach.name }}
         </option>
-      </select>
+      </select> -->
       <span v-if="errors.coaches">{{ errors.coaches }}</span>
     </div>
 
@@ -82,40 +88,11 @@
       </select>
       <span v-if="errors.gyms">{{ errors.gyms }}</span>
     </div>
-
-    <!-- <div class="mb-3 form-group" v-if="!formImage">
-      <label for="avatar_image" class="form-label">User image</label>
-      <input
-        @change="handleFileUpload($event)"
-        class="form-control"
-        placeholder="avatar_image"
-        name="avatar_image"
-        type="file"
-        id="avatar_image"
-        :class="{ 'is-invalid': errors.avatar_image }"
-      />
-      <span v-if="errors.avatar_image">{{ errors.avatar_image }}</span>
-    </div>
-    <div v-else class="justify-content-center">
-      <img :src="formImage" width="200" height="200" />
-      <button class="btn btn-danger d-block btn-sm mt-2" @click="removeImage">
-        Remove image
-      </button>
-    </div> -->
-
-    <!-- <div class="mb-3 form-group">
-      <label for="role" class="form-label">Role</label>
-      <select class="form-control" name="role" id="role" :class="{ 'is-invalid': errors.role }">
-        <option value="">Select role</option>
-        <option value="admin">Admin</option>
-        <option value="city_manager">City manager</option>
-        <option value="user">User</option>
-      </select> -->
-
     <button type="submit" class="btn btn-primary">Add</button>
   </form>
 </template>
 <script>
+// eslint-disable prettier/prettier
 // import VsudAvatar from "@/components/VsudAvatar.vue";
 // import VsudBadge from "@/components/VsudBadge.vue";
 // import { Form, Field, ErrorMessage } from "vee-validate";]
@@ -123,6 +100,8 @@ import TrainingSessionsService from "../../services/GymManagers/TrainingSessionS
 import CoachService from "../../services/Coaches/CoachesService";
 import GymService from "../../services/Gym/GymService";
 import Swal from "sweetalert2";
+import Multiselect from "@vueform/multiselect";
+<style src="@vueform/multiselect/themes/default.css"></style>
 const Toast = Swal.mixin({
   toast: true,
   position: "top-end",
@@ -136,8 +115,12 @@ const Toast = Swal.mixin({
 });
 export default {
   name: "add/edit-session",
+  components: {
+    Multiselect,
+  },
   data() {
     return {
+      value: null,
       editmode: false,
       errors: {},
       // token: "2|6kfynCaHfYggdULaqx7Kl5NEwvWIi465094zlUCF",
@@ -156,8 +139,9 @@ export default {
   methods: {
     submit: function () {
       this.formValidation();
-      console.log(Object.keys(this.errors).length);
-      console.log(this.form.gym_id);
+      // console.log(Object.keys(this.errors).length);
+      // console.log(this.form.gym_id);
+      console.log(this.coaches);
       if (!(Object.keys(this.errors).length > 0)) {
         TrainingSessionsService.create(this.form)
           .then((response) => {
@@ -201,11 +185,21 @@ export default {
     getCoaches: function () {
       CoachService.getAll()
         .then((response) => {
-          this.coaches = response.data;
+          this.coaches = this.formatCoaches(response.data);
+          console.log("hna");
+          console.log(this.coaches);
         })
         .catch((e) => {
           console.log(e);
         });
+    },
+    formatCoaches: function (coaches) {
+      return coaches.map((coach) => {
+        return {
+          value: coach.id,
+          label: coach.name,
+        };
+      });
     },
     getGyms: function () {
       GymService.getAll()
@@ -227,3 +221,4 @@ export default {
   },
 };
 </script>
+<style src="@vueform/multiselect/themes/default.css"></style>
