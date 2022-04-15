@@ -1,3 +1,4 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div
     class="w-auto h-auto collapse navbar-collapse max-height-vh-100 h-100"
@@ -21,7 +22,7 @@
       </li>
        <!-- this tha link to gym members -->
       <li class="nav-item">
-        <sidenav-collapse navText="GymMembers" :to="{ name: 'GymMembers' }">
+        <sidenav-collapse navText="Gym Members" :to="{ name: 'GymMembers' }">
           <template v-slot:icon>
             <icon name="GymMembers" />
           </template>
@@ -52,8 +53,16 @@
           </template>
         </sidenav-collapse>
       </li>
-      <!-- ------------------------- -->
       <li class="nav-item">
+        <sidenav-collapse navText="Packages" :to="{ name: 'Packages' }">
+          <template v-slot:icon>
+            <icon name="Users" />
+          </template>
+        </sidenav-collapse>
+      </li>
+      
+      <!-- ------------------------- -->
+      <!-- <li class="nav-item">
         <sidenav-collapse navText="Tables" :to="{ name: 'Tables' }">
           <template v-slot:icon>
             <icon name="tables" />
@@ -113,7 +122,7 @@
             <icon name="sign-up" />
           </template>
         </sidenav-collapse>
-      </li>
+      </li> -->
     </ul>
   </div>
   <div class="pt-3 mx-3 mt-3 sidenav-footer">
@@ -134,6 +143,7 @@
   </div>
 </template>
 <script>
+/* eslint-disable prettier/prettier */
 import Icon from "@/components/Icon.vue";
 import SidenavCollapse from "./SidenavCollapse.vue";
 // import SidenavCard from "./SidenavCard.vue";

@@ -17,6 +17,7 @@ import addCityManager from "@/views/components/addCityManager.vue";
 import editCityManager from "@/views/components/editCityManager.vue";
 import CityTable from "@/views/components/CitiesTable.vue";
 import editTrainingSession from "@/views/components/editTrainingSession.vue";
+import Packages from "@/views/components/Packages.vue";
 
 const routes = [{
         path: "/",
@@ -62,7 +63,7 @@ const routes = [{
     },
     {
         path: "/TrainingSessions/create",
-        name: "addTrainingSession",
+        name: "AddTrainingSession",
         component: addTrainingSessions,
     },
     {
@@ -75,6 +76,11 @@ const routes = [{
         path: "/citymanagers",
         name: "CityManagers",
         component: CityManagers,
+    },
+    {
+        path: "/Packages",
+        name: "Packages",
+        component: Packages,
     },
     {
         path: "/tables",
