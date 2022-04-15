@@ -9,6 +9,7 @@ import Rtl from "@/views/Rtl.vue";
 import SignIn from "@/views/SignIn.vue";
 import GymMembers from "@/views/GymMembers.vue";
 import GymManagers from "@/views/GymManagers.vue";
+import Attendances from "@/views/Attendances.vue";
 import TrainingSessions from "@/views/TrainingSessions.vue";
 import addTrainingSessions from "@/views/components/addTrainingSessions.vue";
 import CityManagers from "@/views/CityManagers.vue";
@@ -55,6 +56,11 @@ const routes = [{
         path: "/GymManagers",
         name: "GymManagers",
         component: GymManagers,
+    },
+    {
+        path: "/Attendances",
+        name: "Attendances",
+        component: Attendances,
     },
     {
         path: "/TrainingSessions",
