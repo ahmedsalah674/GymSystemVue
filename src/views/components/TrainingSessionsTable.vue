@@ -2,11 +2,10 @@
 <template>
   <div class="card mb-4">
     <div class="card-header pb-0">
-      <h6>Training Sessions</h6>
-      <div class="card-tools">
+      <h6 class=" text-center">Current Training Sessions</h6>
+      <div class="card-tools text-center">
         <router-link :to="'/TrainingSessions/create'"
-        class="btn btn-success"
-        >Add New <i class="fas fa-user-plus fa-fw"></i></router-link>
+        class="btn btn-success">Add New <i class="fas fa-user-plus fa-fw"></i></router-link>
       </div>
     </div>
     <div class="card-body px-0 pt-0 pb-2">
@@ -15,7 +14,6 @@
           <thead>
             <tr>
               <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
-              <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Function</th> -->
               <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Day</th>
               <th class=" text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Start Time</th>
               <th class=" text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Finish Time</th>
@@ -68,13 +66,61 @@
     </div>
   </div>
 
+  <div class="card mb-4">
+    <div class="card-header pb-0">
+      <h6 class="text-center">Previous Sessions</h6>
+    </div>
+    <div class="card-body px-0 pt-0 pb-2">
+      <div class="table-responsive p-0">
+        <table class="table align-items-center mb-0">
+          <thead>
+            <tr>
+              <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+              <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Day</th>
+              <th class=" text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Start Time</th>
+              <th class=" text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Finish Time</th>
+              <th class=" text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Coaches</th>
+              <th class="text-secondary opacity-7"></th> 
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="HistoryTrainingSession in HistoryTrainingSessions" :key="HistoryTrainingSession.id">
+              <td class="text-center">
+                {{ HistoryTrainingSession.name }}
+              </td>
+              <td class="text-center">
+                {{ HistoryTrainingSession.session_date }}
+              </td>
+              <td class="text-center">
+                {{ HistoryTrainingSession.start_time }}
+              </td>
+              <td class="text-center">
+                {{ HistoryTrainingSession.end_time }}
+              </td>
+              <td class="text-center text-center">
+                <button
+                  class="btn btn-success"
+                  ref="triggerModal"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                  @click="viewCoaches(HistoryTrainingSession)"
+                  ><i class="fa fa-eye"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
     <div
     class="modal fade"
     id="exampleModal"
     tabindex="-1"
     aria-labelledby="exampleModalLabel"
     aria-hidden="true"
-  >
+    >
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -140,6 +186,7 @@ export default {
       errors: {},
       // token: "2|6kfynCaHfYggdULaqx7Kl5NEwvWIi465094zlUCF",
       TrainingSessions: [],
+      HistoryTrainingSessions: [],
       coaches: [],
     };
   },
@@ -151,11 +198,20 @@ export default {
     getSessions: function () {
       TrainingSessionsService.getAll()
         .then((response) => {
-          this.TrainingSessions = response.data;
+          this.SplitSessions(response.data);
         })
         .catch((e) => {
           console.log(e);
         });
+    },
+    SplitSessions: function ($sessions) {
+      $sessions.forEach((session) => {
+        if (session.session_date < new Date().toISOString().split('T')[0]) {
+          this.HistoryTrainingSessions.push(session);
+        } else {
+          this.TrainingSessions.push(session);
+        }
+      });
     },
     deleteSession: function (sessionId) {
       Swal.fire({
