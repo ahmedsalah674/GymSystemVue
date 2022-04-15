@@ -1,10 +1,5 @@
 <template>
-  <form
-    @submit.prevent="submit"
-    ref="form"
-    autocomplete="off"
-    enctype="multipart/form-data"
-  >
+  <form @submit.prevent="submit" ref="form" autocomplete="off" enctype="multipart/form-data">
     <div class="mb-3 form-group">
       <label for="name" class="form-label">Name</label>
       <input
@@ -12,26 +7,19 @@
         type="text"
         class="form-control"
         id="name"
+        placeholder="Name"
         name="name"
         :class="{ 'is-invalid': errors.name }"
       />
       <span v-if="errors.name">
-        {{ errors.name }}
+        {{ errors.name[0] }}
       </span>
     </div>
 
     <div class="mb-3 form-group">
       <label for="email" class="form-label">Email address</label>
-      <input
-        v-model="form.email"
-        type="email"
-        class="form-control"
-        id="email"
-        name="email"
-        placeholder="Email"
-        :class="{ 'is-invalid': errors.email }"
-      />
-      <span v-if="errors.email">{{ errors.email }}</span>
+      <input v-model="form.email" type="email" class="form-control" id="email" name="email" placeholder="Email" :class="{ 'is-invalid': errors.email }"/>
+      <span v-if="errors.email">{{ errors.email[0] }}</span>
     </div>
 
     <div class="mb-3 form-group">
@@ -42,6 +30,7 @@
         name="password"
         class="form-control"
         id="password"
+        placeholder="Password"
         :class="{ 'is-invalid': errors.password }"
       />
       <span v-if="errors.password">{{ errors.password }}</span>
@@ -56,12 +45,11 @@
         type="password"
         name="password_confirmation"
         class="form-control"
+        placeholder="Password Confirmation"
         id="password_confirmation"
         :class="{ 'is-invalid': errors.password_confirmation }"
       />
-      <span v-if="errors.password_confirmation">{{
-        errors.password_confirmation
-      }}</span>
+      <span v-if="errors.password_confirmation">{{ errors.password_confirmation[0] }}</span>
     </div>
 
     <div class="mb-3 form-group" v-if="!formImage">
@@ -75,7 +63,7 @@
         id="avatar_image"
         :class="{ 'is-invalid': errors.avatar_image }"
       />
-      <span v-if="errors.avatar_image">{{ errors.avatar_image }}</span>
+      <span v-if="errors.avatar_image">{{ errors.avatar_image[0] }}</span>
     </div>
     <div v-else class="justify-content-center">
       <img :src="formImage" width="200" height="200" />
@@ -83,16 +71,16 @@
         Remove image
       </button>
     </div>
-
-    <!-- <div class="mb-3 form-group">
-      <label for="role" class="form-label">Role</label>
-      <select class="form-control" name="role" id="role" :class="{ 'is-invalid': errors.role }">
-        <option value="">Select role</option>
-        <option value="admin">Admin</option>
-        <option value="city_manager">City manager</option>
-        <option value="user">User</option>
-      </select> -->
-
+    <div class="mb-3 form-group">
+      <label for="city_id" class="form-label">City</label>
+      <select class="form-control" id="city_id" name="city_id" v-model="form.city_id"  :class="{ 'is-invalid': errors.city_id }" >
+        <!-- <option value="" selected disabled hidden>Choose here</option> -->
+        <option v-for="city in cities" :key="city.id" :value="city.id">
+          {{ city.name }}
+        </option>
+      </select>
+    </div>
+      <span v-if="errors.city_id">{{ errors.city_id[0] }}</span>
     <button type="submit" class="btn btn-primary">Add</button>
   </form>
 </template>
@@ -101,6 +89,7 @@
 // import VsudBadge from "@/components/VsudBadge.vue";
 // import { Form, Field, ErrorMessage } from "vee-validate";
 import CityManagersService from "../../services/CityManagers/CityManagersService";
+import CityService from "../../services/City/CityService";
 import Swal from "sweetalert2";
 const Toast = Swal.mixin({
   toast: true,
@@ -129,13 +118,14 @@ export default {
         password_confirmation: "",
         avatar_image: "",
       },
-    };
+      cities:[]
+    }
   },
   methods: {
-    getUsers: function () {
-      CityManagersService.getAll()
+    getCitiesWithoutManger: function () {
+      CityService.getWithoutManger()
         .then((response) => {
-          this.cityManagers = response.data;
+          this.cities = response.data;
         })
         .catch((e) => {
           console.log(e);
@@ -165,9 +155,9 @@ export default {
         formData.append("avatar_image", this.form.avatar_image);
         CityManagersService.create(formData)
           .then((response) => {
-            console.log("response",response);
-            if (response.data.error) {
-              this.errors = response.data.error;
+            console.log("response", response);
+            if (response.data.status == "error") {
+              this.errors = response.data.errors;
               console.log(this.errors);
             } else {
               Toast.fire({
@@ -182,10 +172,11 @@ export default {
                 password_confirmed: "",
                 avatar_image: "",
                 cityName: "",
+                city_id: "",
               };
               this.image = "";
               this.errors = [];
-              this.$refs["myform"].reset();
+              this.$refs["form"].reset();
               formData.delete("avatar_image");
               this.removeImage();
             }
@@ -194,10 +185,9 @@ export default {
             console.log(err);
             console.log("error");
           });
-      }else{
+      } else {
         console.log(this.errors);
       }
-
     },
     formValidation: function () {
       this.errors = {};
@@ -217,6 +207,9 @@ export default {
           "password confirmation must be same as password";
       }
     },
+  },
+  created() {
+    this.getCitiesWithoutManger();
   },
 };
 </script>

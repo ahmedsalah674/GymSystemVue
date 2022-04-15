@@ -3,6 +3,9 @@ class CityManagersService {
     getAll() {
         return http.get("/cities");
     }
+    getWithoutManger() {
+        return http.get("/cities-without-manager");
+    }
     get(id) {
         return http.get(`/cities/${id}`);
     }
