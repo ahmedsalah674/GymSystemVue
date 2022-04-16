@@ -15,7 +15,7 @@
         <div class="col-auto">
           <div class="avatar avatar-xl position-relative">
             <img
-              src="../assets/img/bruce-mars.jpg"
+              :src="profile_image"
               alt="profile_image"
               class="shadow-sm w-100 border-radius-lg"
             />
@@ -23,8 +23,8 @@
         </div>
         <div class="col-auto my-auto">
           <div class="h-100">
-            <h5 class="mb-1">Alec Thompson</h5>
-            <p class="mb-0 text-sm font-weight-bold">CEO / Co-Founder</p>
+            <h5 class="mb-1">{{user_name}}</h5>
+            <p class="mb-0 text-sm font-weight-bold">{{user_role}}</p>
           </div>
         </div>
         <div
@@ -188,6 +188,7 @@
                   <span class="ms-1">Settings</span>
                 </a>
               </li>
+               
             </ul>
           </div>
         </div>
@@ -276,7 +277,7 @@
         </div>
       </div>
       <div class="mt-4 col-12 col-md-6 col-xl-4 mt-md-0">
-        <profile-card />
+        <profile-card :name="user_name" :email="user_email"/>
       </div>
       <div class="mt-4 col-12 col-xl-4 mt-xl-0">
         <div class="card h-100">
@@ -501,11 +502,14 @@ import ProjectsCard from "./components/ProjectOverviewCard.vue";
 
 import setNavPills from "@/assets/js/nav-pills.js";
 import setTooltip from "@/assets/js/tooltip.js";
-
 export default {
   name: "profile-overview",
   data() {
     return {
+      profile_image:'',
+      user_name:'',
+      user_email:'',
+      user_role:'',
       showMenu: false,
       sophie,
       marie,
@@ -521,6 +525,7 @@ export default {
       img3,
     };
   },
+
   components: {
     VsudSwitch,
     ProfileCard,
@@ -529,12 +534,17 @@ export default {
   },
 
   mounted() {
+    this.profile_image=this.$store.state.user["avatar_image"];
+    this.user_name=this.$store.state.user["name"];
+    this.user_email=this.$store.state.user["email"];
+    this.user_role=this.$store.state.user["role"];
     this.$store.state.isAbsolute = true;
     this.$store.state.isNavFixed = false;
     setNavPills();
     setTooltip();
   },
   beforeUnmount() {
+ 
     this.$store.state.isAbsolute = false;
   },
 };

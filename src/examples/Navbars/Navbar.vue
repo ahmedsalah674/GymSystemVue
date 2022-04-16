@@ -30,7 +30,7 @@
           </div>
         </div>
         <ul class="navbar-nav justify-content-end">
-          <li class="nav-item d-flex align-items-center">
+          <li  v-if="!$store.getters.isLoggedIn" class="nav-item d-flex align-items-center">
             <router-link
               :to="{ name: 'Sign In' }"
               class="px-0 nav-link font-weight-bold"
@@ -45,6 +45,18 @@
               >
               <span v-else class="d-sm-inline d-none">Sign In </span>
             </router-link>
+          </li>
+           <li  v-if="$store.getters.isLoggedIn" class="nav-item d-flex align-items-center">
+            <button @click="logout()"  class="px-0 nav-link font-weight-bold text-dark" style="background:transparent;outline:none;border:none;">
+                 <i
+                class="fa fa-user"
+                :class="this.$store.state.isRTL ? 'ms-sm-2' : 'me-sm-1'"
+              ></i>
+              <span v-if="this.$store.state.isRTL" class="d-sm-inline d-none"
+                >يسجل خروج</span
+              >
+              <span v-else class="d-sm-inline d-none">Logout </span>
+            </button>
           </li>
           <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
             <a
@@ -203,6 +215,7 @@
 <script>
 import Breadcrumbs from "../Breadcrumbs.vue";
 import { mapMutations, mapActions } from "vuex";
+import Swal from "sweetalert2";
 
 export default {
   name: "navbar",
@@ -223,8 +236,26 @@ export default {
       this.toggleSidebarColor("bg-white");
       this.navbarMinimize();
     },
+      logout () {
+        Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Log out!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+               this.$store.dispatch('logout');
+               this.$router.push("/sign-in");
+
+        }
+      });
+
+    }
   },
-  components: {
+   ponents: {
     Breadcrumbs,
   },
   computed: {

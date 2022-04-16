@@ -15,8 +15,20 @@ export default createStore({
     showNavbar: true,
     showFooter: true,
     showMain: true,
+    user: null,
   },
   mutations: {
+    setUserData(state, userData) {
+       state.user = userData,
+        localStorage.setItem('user', JSON.stringify(userData))
+
+    },
+    clearUserData(state) {
+      localStorage.removeItem('user');
+      localStorage.removeItem('userToken');
+      state.user = null;
+
+    },
     toggleConfigurator(state) {
       state.showConfig = !state.showConfig;
     },
@@ -53,6 +65,66 @@ export default createStore({
     toggleSidebarColor({ commit }, payload) {
       commit("sidebarType", payload);
     },
+    logout({ commit }) {
+      commit('clearUserData')
+    }
   },
-  getters: {},
+  getters: {
+    // isAdmin(state) {
+    //   if (state.user) {
+    //     return state.user["role"] === "admin";
+    //   }
+    // },
+    // isCityManager(state) {
+    //   if (state.user) {
+    //     return state.user["role"] === "city_manager";
+    //   }
+    // },
+    // isGymManager(state) {
+    //   if (state.user) {
+    //     return state.user["role"] === "gym_manager";
+    //   }
+    // },
+    // isUser(state) {
+    //   if (state.user) {
+    //     return state.user["role"] === "user";
+    //   }
+
+    // },
+    atLeastAdmin(state) {
+      if (state.user) {
+        return state.user["role"] === "admin";
+      }
+    },
+    atLeastCityManager(state) {
+      if (state.user) {
+        return (
+          state.user["role"] === "admin" || state.user["role"] === "city_manager"
+        );
+      }
+    },
+    atLeastGymManager(state) {
+      if (state.user) {
+        return (
+          state.user["role"] === "gym_manager" ||
+          state.user["role"] === "city_manager" ||
+          state.user["role"] === "admin"
+        );
+      }
+    },
+    atLeastUser(state) {
+      if (state.user) {
+       return (
+        state.user["role"] === "user"||
+        state.user["role"] === "gym_manager" ||
+        state.user["role"] === "city_manager" ||
+        state.user["role"] === "admin"
+       );
+      }
+
+    },
+
+    isLoggedIn: state => !!state.user
+
+  },
 });

@@ -12,7 +12,7 @@
         </sidenav-collapse>
       </li> -->
       <!-- this tha link to gym members -->
-        <li class="nav-item">
+        <li class="nav-item" v-if="$store.getters.atLeastAdmin" >
         <sidenav-collapse navText="City Managers" :to="{ name: 'CityManagers' }">
           <template v-slot:icon>
             <icon name="Users" />
@@ -20,7 +20,7 @@
         </sidenav-collapse>
       </li>
        <!-- this tha link to gym members -->
-      <li class="nav-item">
+      <li class="nav-item"  v-if="$store.getters.atLeastGymManager">
         <sidenav-collapse navText="GymMembers" :to="{ name: 'GymMembers' }">
           <template v-slot:icon>
             <icon name="GymMembers" />
@@ -29,14 +29,14 @@
       </li>
       <!-- ------------------------- -->
       <!-- this tha link to gym managers -->
-      <li class="nav-item">
+      <li class="nav-item" v-if="$store.getters.atLeastCityManager">
         <sidenav-collapse navText="Gym Managers" :to="{ name: 'GymManagers' }">
           <template v-slot:icon>
             <icon name="Users" />
           </template>
         </sidenav-collapse>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" v-if="$store.getters.atLeastGymManager">
         <sidenav-collapse navText="Training Sessions" :to="{ name: 'TrainingSessions' }">
           <template v-slot:icon>
             <icon name="Users" />
@@ -45,7 +45,7 @@
       </li>
       <!-- ------------------------- -->
         <!-- this tha link to gym managers -->
-      <li class="nav-item">
+      <li class="nav-item"  v-if="$store.getters.atLeastAdmin" >
         <sidenav-collapse navText="Cities" :to="{ name: 'Cities' }">
           <template v-slot:icon>
             <icon name="Users" />
@@ -53,14 +53,14 @@
         </sidenav-collapse>
       </li>
       <!-- ------------------------- -->
-      <li class="nav-item">
+      <li class="nav-item" v-if="$store.getters.atLeastGymManager">
         <sidenav-collapse navText="Tables" :to="{ name: 'Tables' }">
           <template v-slot:icon>
             <icon name="tables" />
           </template>
         </sidenav-collapse>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" v-if="$store.getters.atLeastGymManager">
         <sidenav-collapse navText="Billing" :to="{ name: 'Billing' }">
           <template v-slot:icon>
             <icon name="billing" />
@@ -68,7 +68,7 @@
         </sidenav-collapse>
       </li>
 
-      <li class="nav-item">
+      <li class="nav-item" v-if="$store.getters.atLeastGymManager">
         <sidenav-collapse
           navText="Virtual Reality"
           :to="{ name: 'Virtual Reality' }"
@@ -100,20 +100,21 @@
           </template>
         </sidenav-collapse>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" v-if="!$store.getters.isLoggedIn">
         <sidenav-collapse navText="Sign In" :to="{ name: 'Sign In' }">
           <template v-slot:icon>
             <icon name="sign-in" />
           </template>
         </sidenav-collapse>
       </li>
-      <li class="nav-item">
+   <!--   <li class="nav-item">
         <sidenav-collapse navText="Sign Up" :to="{ name: 'Sign Up' }">
           <template v-slot:icon>
             <icon name="sign-up" />
           </template>
         </sidenav-collapse>
       </li>
+      -->
     </ul>
   </div>
   <div class="pt-3 mx-3 mt-3 sidenav-footer">
