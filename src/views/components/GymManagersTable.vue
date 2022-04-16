@@ -455,14 +455,6 @@ export default {
               this.GymMembers = this.GymMembers.filter(
                 (user) => user.id != userid
               );
-              //   let targetid = 0;
-              //   for (let i = 0; i < this.GymMembers.length; i++) {
-              //     if (this.GymMembers[i].user_id == userid) {
-              //       targetid = i;
-              //       break;
-              //     }
-              //   }
-              //   this.GymMembers.splice(targetid, 1);
             }
           });
         }

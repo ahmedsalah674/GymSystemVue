@@ -53,6 +53,16 @@
           </template>
         </sidenav-collapse>
       </li>
+      <!-- ------------------------- -->
+         <!-- this tha link to Attendances -->
+      <li class="nav-item">
+        <sidenav-collapse navText="Attendances" :to="{ name: 'Attendances' }">
+          <template v-slot:icon>
+            <icon name="Users" />
+          </template>
+        </sidenav-collapse>
+      </li>
+      <!-- ------------------------- -->
       <li class="nav-item">
         <sidenav-collapse navText="Packages" :to="{ name: 'Packages' }">
           <template v-slot:icon>

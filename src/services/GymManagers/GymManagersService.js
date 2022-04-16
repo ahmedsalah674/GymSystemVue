@@ -11,7 +11,7 @@ class GymManagersService {
         return http.post("/gymmanagers", data, config);
     }
     update(id, data , config) {
-        return http.post(`/gymmanager/${id}/update`, data , config);
+        return http.post(`/gymmanagers/${id}/update`, data , config);
     }
     delete(id) {
         return http.delete(`/gymmanagers/${id}`);
