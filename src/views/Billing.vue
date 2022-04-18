@@ -1,3 +1,4 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div class="container-fluid mt-4">
     <div class="row align-items-center">
@@ -52,6 +53,7 @@
 </template>
 
 <script>
+/* eslint-disable prettier/prettier */
 import setTooltip from "@/assets/js/tooltip.js";
 import NavPill from "./components/NavPill.vue";
 import MasterCard from "@/examples/Cards/MasterCard.vue";
