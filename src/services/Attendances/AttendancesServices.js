@@ -3,7 +3,7 @@ class AttendancesServices {
     getAll() {
         return http.get("/attendances");
     }
-    getAllFormat(search) {
+    getAllFormat() {
         return http.get(`/attendancesformat`);
     }
     get(id) {
