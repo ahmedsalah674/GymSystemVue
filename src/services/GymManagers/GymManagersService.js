@@ -4,6 +4,9 @@ class GymManagersService {
     getAll() {
         return http.get("/gymmanagers");
     }
+    getWithoutGyms() {
+        return http.get("/gymmanagers-withoutGyms");
+    }
     get(id) {
         return http.get(`/gymmanagers/${id}`);
     }

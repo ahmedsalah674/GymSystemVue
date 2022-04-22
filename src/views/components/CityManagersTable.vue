@@ -14,11 +14,11 @@
           <thead>
             <tr>
               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Manager</th>
-              <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Function</th> -->
               <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Status</th>
-              <th class=" text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">created at</th>
-              <th class="text-secondary opacity-7"></th>
-              <th class="text-secondary opacity-7"></th>
+              <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">City</th>
+              <th class=" text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Added at</th>
+              <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">update</th>
+              <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">delete</th>
             </tr>
           </thead>
           <tbody>
@@ -34,10 +34,6 @@
                   </div>
                 </div>
               </td>
-              <!-- <td>
-                <p class="text-xs font-weight-bold mb-0">Manager</p>
-                <p class="text-xs text-secondary mb-0">Organization</p>
-              </td> -->
               <td class="align-middle text-center text-md cursor-pointer">
                 <vsud-badge :color="cityManager.ban ? 'secondary' : 'success'" variant="gradient" size="sm">
                   <!-- @click="editUserBan(cityManager.id)" -->
@@ -46,21 +42,22 @@
               </td>
               <td class="align-middle text-center">
                 <span class="text-secondary text-xs font-weight-bold">
+                  {{ cityManager.city }}
+                </span>
+              </td>
+              <td class="align-middle text-center">
+                <span class="text-secondary text-xs font-weight-bold">
                   {{ cityManager.created_at }}
                 </span>
               </td>
-              <td class="align-middle">
-                <router-link :to="'/citymanagers/' + cityManager.id + '/edit'">Edit</router-link>
+              <td class="align-middle text-center">
+                <router-link :to="'/citymanagers/' + cityManager.id + '/edit'">
+                  <i class="fa fa-edit text-info cursor-pointer"></i>
+                </router-link>
               </td>
 
               <td class="align-middle text-center">
-                <a
-                  href="#"
-                  @click="deleteUser(cityManager.id)"
-                  style="color: red"
-                >
-                  <i class="fa fa-trash red"></i>
-                </a>
+                  <i class="fa fa-trash text-danger cursor-pointer" @click="deleteUser(cityManager.id)"></i>
               </td>
             </tr>
           </tbody>
@@ -75,24 +72,12 @@ import VsudAvatar from "@/components/VsudAvatar.vue";
 import VsudBadge from "@/components/VsudBadge.vue";
 import CityManagersService from "../../services/CityManagers/CityManagersService";
 import Swal from "sweetalert2";
-// const Toast = Swal.mixin({
-//   toast: true,
-//   position: "top-end",
-//   showConfirmButton: false,
-//   timer: 3000,
-//   timerProgressBar: true,
-//   didOpen: (toast) => {
-//     toast.addEventListener("mouseenter", Swal.stopTimer);
-//     toast.addEventListener("mouseleave", Swal.resumeTimer);
-//   },
-// });
 export default {
   name: "city-managers-table",
   data() {
     return {
       editmode: false,
       errors: {},
-      // token: "2|6kfynCaHfYggdULaqx7Kl5NEwvWIi465094zlUCF",
       cityManagers: [],
     };
   },
@@ -123,11 +108,14 @@ export default {
         if (result.isConfirmed) {
           CityManagersService.delete(userid).then((response) => {
             console.log(response);
-            if (response.status == 200) {
-              Swal.fire("Deleted!", "Your file has been deleted.", "success");
+            if (response.data.status == "sucsess") {
+              Swal.fire("Deleted!", response.data.message, "success");
               this.cityManagers = this.cityManagers.filter(
                 (user) => user.id != userid
               );
+            }
+            else {
+              Swal.fire("Error!", response.data.error, "error");
             }
           });
         }

@@ -20,93 +20,44 @@
         <table class="table mb-0">
           <thead>
             <tr>
-              <th
-                class="
-                  text-center text-uppercase text-secondary text-xxs
-                  font-weight-bolder
-                  opacity-7
-                  ps-2
-                "
-              >
-                Name
-              </th>
-              <th
-                class="
-                  text-center text-uppercase text-secondary text-xxs
-                  font-weight-bolder
-                  opacity-7
-                "
-              >
-                Email
-              </th>
-              <th
-                class="
-                  text-center text-uppercase text-secondary text-xxs
-                  font-weight-bolder
-                  opacity-7
-                "
-              >
-                Gender
-              </th>
-              <th
-                class="
-                  text-center text-uppercase text-secondary text-xxs
-                  font-weight-bolder
-                  opacity-7
-                "
-              >
-                Avatar
-              </th>
-              <th
-                class="
-                  text-center text-uppercase text-secondary text-xxs
-                  font-weight-bolder
-                  opacity-7
-                "
-              >
-                update
-              </th>
-              <th
-                class="
-                  text-center text-uppercase text-secondary text-xxs
-                  font-weight-bolder
-                  opacity-7
-                "
-              >
-                delete
-              </th>
+              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Member</th>
+              <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Gender</th>
+              <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Added at</th>
+              <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Edit</th>
+              <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">delete</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="GymMember in GymMembers" :key="GymMember.id">
-              <td class="text-center align-middle">
-                {{ GymMember.name }}
+              <td>
+                <div class="d-flex px-2 py-1">
+                  <div>
+                    <vsud-avatar :img="GymMember.avatar_image" size="md" border-radius="lg" class="me-3" alt="user image"/>
+                  </div>
+                  <div class="d-flex flex-column justify-content-center">
+                    <h6 class="mb-0 text-sm">{{ GymMember.name }}</h6>
+                    <p class="text-xs text-secondary mb-0">{{ GymMember.email }}</p>
+                  </div>
+                </div>
               </td>
-              <td class="text-center align-middle">
-                {{ GymMember.email }}
+               <td class="align-middle text-center">
+                <span class="text-secondary text-xs font-weight-bold">
+                  {{GymMember.gender}}
+                </span>
               </td>
-              <td class="text-center align-middle text-center">
-                {{ GymMember.gender }}
+              <td class="align-middle text-center">
+                <span class="text-secondary text-xs font-weight-bold">
+                  {{GymMember.created_at}}
+                </span>
               </td>
-              <td class="text-center align-middle text-center">
-                <img
-                  :src="GymMember.avatar_image"
-                  width="50"
-                  height="50"
-                />
-              </td>
-              <td class="text-center align-middle text-center">
-                <a href="#" style="color: blue" @click="editModal(GymMember)">
-                  <i class="fa fa-edit blue"></i>
+              <td class="text-center align-middle text-center ">
+                <a href="#" @click="editModal(GymMember)">
+                  <i class="fa fa-edit text-info cursor-pointer"></i>
                 </a>
               </td>
               <td class="text-center align-middle text-center">
-                <a
-                  href="#"
-                  @click="deleteUser(GymMember.id)"
-                  style="color: red"
-                >
-                  <i class="fa fa-trash red"></i>
+                <a @click.prevent="deleteUser(GymMember.id)">
+                  <i class="fa fa-trash text-danger cursor-pointer"></i>
                 </a>
               </td>
             </tr>
@@ -117,13 +68,7 @@
   </div>
 
   <!-- Modal -->
-  <div
-    class="modal fade"
-    id="exampleModal"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
+  <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -135,11 +80,11 @@
           </h5>
           <button
             type="button"
-            class="close"
+            class="btn btn-danger "
             data-bs-dismiss="modal"
             aria-label="Close"
           >
-            <span aria-hidden="true">&times;</span>
+            <span aria-hidden="true"><i class="fa fa-times"/></span>
           </button>
         </div>
         <form
@@ -283,6 +228,7 @@
 </template>
 
 <script>
+import VsudAvatar from "@/components/VsudAvatar.vue";
 import GymMemberService from "../../services/GymMembers/GymMemberService";
 import Swal from "sweetalert2";
 const Toast = Swal.mixin({
@@ -317,7 +263,9 @@ export default {
       GymMembers: [],
     };
   },
-  components: {},
+  components: {
+    VsudAvatar
+  },
   methods: {
     getUsers: function () {
       GymMemberService.getAll()
