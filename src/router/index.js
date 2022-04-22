@@ -22,6 +22,7 @@ import Packages from "@/views/components/Packages.vue";
 import GymsTable from "@/views/components/gymTables.vue";
 import editGym from "@/views/components/editGym.vue";
 import addGym from "@/views/components/addGym.vue";
+import Revenue from "@/views/Revenue.vue";
 
 const routes = [{
         path: "/",
@@ -79,6 +80,11 @@ const routes = [{
         path: "/Attendances",
         name: "Attendances",
         component: Attendances,
+    },
+    {
+        path: "/revenue",
+        name: "Revenue",
+        component: Revenue,
     },
     {
         path: "/TrainingSessions",
