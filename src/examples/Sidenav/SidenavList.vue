@@ -85,6 +85,16 @@
       </li>
 
       <!-- ------------------------- -->
+
+      <!-- REVENUE -->
+       <li class="nav-item">
+        <sidenav-collapse navText="Revenue" :to="{ name: 'Revenue' }">
+          <template v-slot:icon>
+            <icon name="Users" />
+          </template>
+        </sidenav-collapse>
+      </li>
+      <!--  -->
       <!-- <li class="nav-item">
         <sidenav-collapse navText="Tables" :to="{ name: 'Tables' }">
           <template v-slot:icon>

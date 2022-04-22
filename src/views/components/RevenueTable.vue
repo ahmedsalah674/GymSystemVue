@@ -28,7 +28,6 @@
                   text-uppercase text-secondary text-xxs
                   font-weight-bolder
                   opacity-7
-                  text-center
                 "
               >
                 User
@@ -41,7 +40,7 @@
                   text-center
                 "
               >
-                Training Session
+                Package
               </th>
               <th
                 class="
@@ -51,7 +50,7 @@
                   text-center
                 "
               >
-                Attendance Time
+                Gym
               </th>
               <th
                 class="
@@ -61,7 +60,7 @@
                   text-center
                 "
               >
-                Attendance Date
+                Paid Amount
               </th>
               <th
                 class="
@@ -76,29 +75,44 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="Attendance in array " :key="Attendance.id">
-               <td class="text-center align-middle">
+            <tr v-for="revenue in array" :key="revenue.id">
+              <td>
+                <div class="d-flex px-2 py-1">
+                  <div>
+                    <vsud-avatar
+                      :img="revenue.avatar_image"
+                      size="md"
+                      border-radius="lg"
+                      class="me-3"
+                      alt="user1"
+                    />
+                  </div>
+                  <div class="d-flex flex-column justify-content-center">
+                    <h6 class="mb-0 text-sm">{{ revenue.name }}</h6>
+                    <p class="text-xs text-secondary mb-0">
+                      {{ revenue.email }}
+                    </p>
+                  </div>
+                </div>
+              </td>
+              <td class="text-center align-middle">
                  <span class="text-secondary text-xs font-weight-bold">
-                  {{ Attendance.user_id }}
+                {{ revenue.package_name }}
                 </span>
               </td>
               <td class="text-center align-middle">
                  <span class="text-secondary text-xs font-weight-bold">
-                  {{ Attendance.training_session_id }}
+                {{ revenue.gym_name }}
                 </span>
               </td>
               <td class="text-center align-middle">
                  <span class="text-secondary text-xs font-weight-bold">
-                  {{ Attendance.attendance_time }}
+                {{ revenue.paid_amount }}
                 </span>
               </td>
-              <td class="text-center align-middle">
-                 <span class="text-secondary text-xs font-weight-bold">
-                   {{ Attendance.attendance_date }}
-                </span>
-              </td>
-               <td class="align-middle text-center">
-                  <i class="fa fa-trash text-danger cursor-pointer"  @click="deleteAttend(Attendance.id)"></i>
+
+              <td class="align-middle text-center">
+                  <i class="fa fa-trash text-danger cursor-pointer"  @click="deleteRevenue(revenue.id)"></i>
               </td>
             </tr>
           </tbody>
@@ -109,38 +123,42 @@
 </template>
 
 <script>
-import AttendancesServices from "../../services/Attendances/AttendancesServices";
+import revenueServices from "../../services/Revenue/revenueServices";
 import Swal from "sweetalert2";
+import VsudAvatar from "@/components/VsudAvatar.vue";
 
 export default {
-  name: "Attendances-table",
+  name: "Revenues-table",
   data() {
     return {
-      Attendances: [],
-      search:'',
-      array:[]
+      Revenues: [],
+      search: "",
+      array: [],
     };
   },
   methods: {
-    getAttendances: function () {
-      AttendancesServices.getAllFormat()
+    getRevenues: function () {
+      revenueServices
+        .getAllFormat()
         .then((response) => {
-          this.Attendances = response.data;
-           this.array = response.data;
-
+          this.Revenues = response.data.data;
+          this.array = response.data.data;
+          console.log(this.Revenues);
         })
         .catch((e) => {
           console.log(e);
         });
     },
-    getAttendancesFormat: function () {
-        this.array=[...this.Attendances] ; 
-        this.array= this.Attendances.filter(attend=> (attend.user_id).startsWith(this.search))
-        if (this.search=='' ){
-             this.getAttendances()
-        } 
+    getRevenuesFormat: function () {
+      this.array = [...this.Revenues];
+      this.array = this.Revenues.filter((reven) =>
+        reven.name.startsWith(this.search)
+      );
+      if (this.search == "") {
+        this.getRevenues();
+      }
     },
-    deleteAttend: function (AttendID) {
+    deleteRevenue: function (RevenueID) {
       Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
@@ -151,12 +169,12 @@ export default {
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
         if (result.isConfirmed) {
-          AttendancesServices.delete(AttendID).then((response) => {
+          revenueServices.delete(RevenueID).then((response) => {
             console.log(response);
-            if (response.status == 204) {
+            if (response.status == 200) {
               Swal.fire("Deleted!", "Your file has been deleted.", "success");
-              this.array = this.Attendances.filter(
-                (attend) => attend.id != AttendID
+              this.array = this.Revenues.filter(
+                (reven) => reven.id != RevenueID
               );
             }
           });
@@ -164,14 +182,16 @@ export default {
       });
     },
   },
-  created() {
-    this.getAttendances();
+  components: {
+    VsudAvatar,
   },
-  watch : {
-      search : function (){
-          this.getAttendancesFormat();
-      }
-      
-  }
+  created() {
+    this.getRevenues();
+  },
+  watch: {
+    search: function () {
+      this.getRevenuesFormat();
+    },
+  },
 };
 </script>
