@@ -205,7 +205,7 @@ export default {
     getGyms: function () {
       GymService.getAll()
         .then((response) => {
-          this.gyms = response.data;
+          this.gyms = response.data.data;
         })
         .catch((e) => {
           console.log(e);

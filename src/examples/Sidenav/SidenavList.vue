@@ -13,14 +13,17 @@
         </sidenav-collapse>
       </li> -->
       <!-- this tha link to gym members -->
-        <li class="nav-item">
-        <sidenav-collapse navText="City Managers" :to="{ name: 'CityManagers' }">
+      <li class="nav-item">
+        <sidenav-collapse
+          navText="City Managers"
+          :to="{ name: 'CityManagers' }"
+        >
           <template v-slot:icon>
             <icon name="Users" />
           </template>
         </sidenav-collapse>
       </li>
-       <!-- this tha link to gym members -->
+      <!-- this tha link to gym members -->
       <li class="nav-item">
         <sidenav-collapse navText="Gym Members" :to="{ name: 'GymMembers' }">
           <template v-slot:icon>
@@ -38,14 +41,17 @@
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse navText="Training Sessions" :to="{ name: 'TrainingSessions' }">
+        <sidenav-collapse
+          navText="Training Sessions"
+          :to="{ name: 'TrainingSessions' }"
+        >
           <template v-slot:icon>
             <icon name="Users" />
           </template>
         </sidenav-collapse>
       </li>
       <!-- ------------------------- -->
-        <!-- this tha link to gym managers -->
+      <!-- this tha link to gym managers -->
       <li class="nav-item">
         <sidenav-collapse navText="Cities" :to="{ name: 'Cities' }">
           <template v-slot:icon>
@@ -54,7 +60,14 @@
         </sidenav-collapse>
       </li>
       <!-- ------------------------- -->
-         <!-- this tha link to Attendances -->
+      <li class="nav-item">
+        <sidenav-collapse navText="Gyms" :to="{ name: 'Gyms' }">
+          <template v-slot:icon>
+            <icon name="Users" />
+          </template>
+        </sidenav-collapse>
+      </li>
+      <!-- this tha link to Attendances -->
       <li class="nav-item">
         <sidenav-collapse navText="Attendances" :to="{ name: 'Attendances' }">
           <template v-slot:icon>
@@ -70,7 +83,7 @@
           </template>
         </sidenav-collapse>
       </li>
-      
+
       <!-- ------------------------- -->
       <!-- <li class="nav-item">
         <sidenav-collapse navText="Tables" :to="{ name: 'Tables' }">

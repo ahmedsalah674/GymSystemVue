@@ -20,95 +20,47 @@
         <table class="table mb-0">
           <thead>
             <tr>
-              <th
-                class="
-                  text-uppercase text-secondary text-xxs
-                  font-weight-bolder
-                  opacity-7
-                "
-              >
-                Id
-              </th>
-              <th
-                class="
-                  text-uppercase text-secondary text-xxs
-                  font-weight-bolder
-                  opacity-7
-                  ps-2
-                "
-              >
-                Name
-              </th>
-              <th
-                class="
-                  text-center text-uppercase text-secondary text-xxs
-                  font-weight-bolder
-                  opacity-7
-                "
-              >
-                Email
-              </th>
-              <th
-                class="
-                  text-center text-uppercase text-secondary text-xxs
-                  font-weight-bolder
-                  opacity-7
-                "
-              >
-                Avatar
-              </th>
-              <th
-                class="
-                  text-center text-uppercase text-secondary text-xxs
-                  font-weight-bolder
-                  opacity-7
-                "
-              >
-                update
-              </th>
-              <th
-                class="
-                  text-center text-uppercase text-secondary text-xxs
-                  font-weight-bolder
-                  opacity-7
-                "
-              >
-                delete
-              </th>
+              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Manager</th>
+              <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Status</th>
+              <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Gym</th>
+              <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Added at</th>
+              <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Edit</th>
+              <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">delete</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="GymMember in GymMembers" :key="GymMember.id">
-              <td class="align-middle">
-                {{ GymMember.id }}
+            <tr v-for="gym_manager in gym_managers" :key="gym_manager.gym_manager_id">
+              <td>
+                <div class="d-flex px-2 py-1">
+                  <div>
+                    <vsud-avatar :img="gym_manager.avatar_image" size="md" border-radius="lg" class="me-3" alt="user image"/>
+                  </div>
+                  <div class="d-flex flex-column justify-content-center">
+                    <h6 class="mb-0 text-sm">{{ gym_manager.name }}</h6>
+                    <p class="text-xs text-secondary mb-0">{{ gym_manager.email }}</p>
+                  </div>
+                </div>
               </td>
-              <td class="align-middle">
-                {{ GymMember.name }}
-              </td>
-              <td class="align-middle">
-                {{ GymMember.email }}
-              </td>
-
-              <td class="align-middle text-center">
-                <img :src="GymMember.avatar_image" width="50" height="50" />
-              </td>
-              <td class="align-middle text-center">
-                <a
-                  href="#"
-                  style="color: blue"
-                  @click="editModal(GymMember, false)"
-                >
-                  <i class="fa fa-edit blue"></i>
-                </a>
+              <td class="align-middle text-center text-md cursor-pointer">
+                <vsud-badge :color="gym_manager.ban ? 'secondary' : 'success'" variant="gradient" size="sm">
+                  {{ gym_manager.ban ? "unBan" : "Ban" }}
+                </vsud-badge>
               </td>
               <td class="align-middle text-center">
-                <a
-                  href="#"
-                  @click="deleteUser(GymMember.id)"
-                  style="color: red"
-                >
-                  <i class="fa fa-trash red"></i>
-                </a>
+                <span class="text-secondary text-xs font-weight-bold">
+                  {{gym_manager.gym ? gym_manager.gym.name : ""}}
+                </span>
+              </td>
+              <td class="align-middle text-center">
+                <span class="text-secondary text-xs font-weight-bold">
+                  {{gym_manager.created_at}}
+                </span>
+              </td>
+              <td class="align-middle text-center">
+                  <i class="fa fa-edit text-info cursor-pointer" @click="editModal(gym_manager, false)"></i>
+              </td>
+              <td class="align-middle text-center">
+                  <i class="fa fa-trash text-danger cursor-pointer" @click="deleteUser(gym_manager.gym_manager_id)"></i>
               </td>
             </tr>
           </tbody>
@@ -118,13 +70,7 @@
   </div>
 
   <!-- Modal -->
-  <div
-    class="modal fade"
-    id="exampleModal"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -143,103 +89,41 @@
             <span aria-hidden="true">X</span>
           </button>
         </div>
-        <form
-          @submit.prevent="editmode ? updateUser() : createUser()"
-          ref="myform"
-        >
+        <form @submit.prevent="editmode ? updateUser() : createUser()" ref="myform">
           <div class="modal-body">
             <div class="form-group">
-              <input
-                v-model="form.name"
-                type="text"
-                name="name"
-                placeholder="Name"
-                class="form-control"
-                :class="{ 'is-invalid': errors.name }"
-              />
-              <span v-if="errors.name" class="text-danger">{{
-                errors.name[0]
-              }}</span>
+              <input v-model="form.name" type="text" name="name" placeholder="Name" class="form-control" :class="{ 'is-invalid': errors.name }"/>
+              <span v-if="errors.name" class="text-danger">{{errors.name[0]}}</span>
+            </div>
+            <div class="form-group">
+              <input v-model="form.email" type="email" name="email" placeholder="Email Address" class="form-control" :class="{ 'is-invalid': errors.email }"/>
+              <span v-if="errors.email" class="text-danger">{{errors.email[0]}}</span>
             </div>
 
             <div class="form-group">
-              <input
-                v-model="form.email"
-                type="email"
-                name="email"
-                placeholder="Email Address"
-                class="form-control"
-                :class="{ 'is-invalid': errors.email }"
-              />
-              <span v-if="errors.email" class="text-danger">{{
-                errors.email[0]
-              }}</span>
-            </div>
-
-            <div class="form-group">
-              <input
-                v-model="form.password"
-                v-show="isAddUser == true"
-                placeholder="Pssword"
-                type="password"
-                name="password"
-                id="password"
-                class="form-control"
-                :class="{ 'is-invalid': errors.password }"
-              />
-              <span v-if="errors.password" class="text-danger">{{
-                errors.password[0]
-              }}</span>
+              <input v-model="form.password" v-show="isAddUser == true" placeholder="Pssword" type="password" name="password" id="password" class="form-control" :class="{ 'is-invalid': errors.password }"/>
+              <span v-if="errors.password" class="text-danger">{{errors.password[0]}}</span>
             </div>
             <div class="form-group">
-              <input
-                v-show="isAddUser == true"
-                v-model="form.password_confirmed"
-                type="password"
-                placeholder="Confirmed Password"
-                name="password_confirmed"
-                id="password_confirmed"
-                class="form-control"
-                :class="{ 'is-invalid': errors.password_confirmed }"
-              />
-              <span v-if="errors.password_confirmed" class="text-danger">{{
-                errors.password_confirmed[0]
-              }}</span>
+              <input v-show="isAddUser == true" v-model="form.password_confirmed" type="password" placeholder="Confirmed Password" name="password_confirmed" id="password_confirmed" class="form-control" :class="{ 'is-invalid': errors.password_confirmed }"/>
+              <span v-if="errors.password_confirmed" class="text-danger">{{errors.password_confirmed[0]}}</span>
             </div>
             <div class="form-group">
               <div v-if="!image">
                 <h4>Select an image</h4>
-                <input
-                  @change="handleFileUpload($event)"
-                  type="file"
-                  placeholder="avatar_image"
-                  name="avatar_image"
-                  id="avatar_image"
-                  class="form-control"
-                  :class="{ 'is-invalid': errors.avatar_image }"
-                />
+                <input @change="handleFileUpload($event)" type="file" placeholder="avatar_image" name="avatar_image" id="avatar_image" class="form-control" :class="{ 'is-invalid': errors.avatar_image }"/>
               </div>
               <div v-else>
                 <img :src="image" width="200" height="200" />
-                <button
-                  class="btn btn-danger d-block btn-sm mt-2"
-                  @click="removeImage"
-                >
+                <button class="btn btn-danger d-block btn-sm mt-2" @click="removeImage">
                   Remove image
                 </button>
               </div>
-              <span v-if="errors.avatar_image" class="text-danger">{{
-                errors.avatar_image[0]
-              }}</span>
+              <span v-if="errors.avatar_image" class="text-danger">{{errors.avatar_image[0]}}</span>
             </div>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-danger"
-              data-bs-dismiss="modal"
-              ref="closebtn"
-            >
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" ref="closebtn">
               Close
             </button>
             <button v-show="editmode" type="submit" class="btn btn-success">
@@ -256,6 +140,8 @@
 </template>
 
 <script>
+import VsudAvatar from "@/components/VsudAvatar.vue";
+import VsudBadge from "@/components/VsudBadge.vue";
 import GymManagersService from "../../services/GymManagers/GymManagersService";
 import Swal from "sweetalert2";
 const Toast = Swal.mixin({
@@ -278,7 +164,7 @@ export default {
       isAddUser: false,
       image: "",
       form: {
-        id: "",
+        gym_manager_id: "",
         name: "",
         email: "",
         password: "",
@@ -290,15 +176,19 @@ export default {
         email: "",
       },
       errors: {},
-      GymMembers: [],
+      gym_managers: [],
     };
   },
-  components: {},
+  components: {
+    VsudAvatar,
+    VsudBadge
+  },
   methods: {
     getUsers: function () {
       GymManagersService.getAll()
         .then((response) => {
-          this.GymMembers = response.data;
+          this.gym_managers = response.data;
+          console.log(this.gym_managers);
         })
         .catch((e) => {
           console.log(e);
@@ -352,8 +242,8 @@ export default {
               this.errors = response.data.error;
               console.log(this.errors);
             } else {
-              this.GymMembers.push(response.data);
-              // this.GymMembers = response.data;
+              this.gym_managers.push(response.data);
+              // this.gym_managers = response.data;
               Toast.fire({
                 icon: "success",
                 title: "Created successfully",
@@ -390,27 +280,27 @@ export default {
         formData.append("avatar_image", this.form.avatar_image);
         formData.append("email", this.form.email);
         formData.append("name", this.form.name);
-        formData.append("id", this.form.id);
+        formData.append("id", this.form.gym_manager_id);
        
         let config = {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         };
-         GymManagersService.update(this.form.id, formData, config)
+         GymManagersService.update(this.form.gym_manager_id, formData, config)
           .then((response) => {
             console.log(response)
             if (response.data.error) {
               this.errors = response.data.errors;
               console.log(this.errors);
             } else if (response.status == 200) {
-              this.GymMembers.forEach((user) => {
-                if (user.id == this.form.id) {
+              this.gym_managers.forEach((user) => {
+                if (user.gym_manager_id == this.form.gym_manager_id) {
                   user.name = this.form.name;
                   user.email = this.form.email;
                 }
               });
-              console.log(this.GymMembers);
+              console.log(this.gym_managers);
               Toast.fire({
                 icon: "success",
                 title: "updated successfully",
@@ -449,32 +339,34 @@ export default {
         if (result.isConfirmed) {
           GymManagersService.delete(userid).then((response) => {
             console.log(response);
-            if (response.status == 204) {
-              //data.message == "deleted"
+            if (response.data.status == "success") {
               Swal.fire("Deleted!", "Your file has been deleted.", "success");
-              this.GymMembers = this.GymMembers.filter(
-                (user) => user.id != userid
+              this.gym_managers = this.gym_managers.filter(
+                (user) => user.gym_manager_id != userid
               );
+            }
+            else{
+              Swal.fire("Error", response.data.error, "error");
             }
           });
         }
       });
     },
-    editModal: function (GymMember, isAddUser) {
+    editModal: function (gym_manager, isAddUser) {
       this.isAddUser = isAddUser;
       this.editmode = true;
       let triggerModal = this.$refs["triggerModal"];
       triggerModal.click();
-      this.image =GymMember.avatar_image;
-        // "http://drive.google.com/uc?export=view&id=" + GymMember.avatar_image;
-      this.form.id = GymMember.id;
-      this.form.name = GymMember.name;
-      this.form.email = GymMember.email;
-      //   this.form.password = GymMember.password;
-      //   this.form.password_confirmed = GymMember.password;
-      //   this.form.gender = GymMember.gender;
-      //   this.form.date_of_birth = GymMember.date_of_birth;
-      this.form.avatar_image = GymMember.avatar_image;
+      this.image =gym_manager.avatar_image;
+        // "http://drive.google.com/uc?export=view&id=" + gym_manager.avatar_image;
+      this.form.gym_manager_id = gym_manager.gym_manager_id;
+      this.form.name = gym_manager.name;
+      this.form.email = gym_manager.email;
+      //   this.form.password = gym_manager.password;
+      //   this.form.password_confirmed = gym_manager.password;
+      //   this.form.gender = gym_manager.gender;
+      //   this.form.date_of_birth = gym_manager.date_of_birth;
+      this.form.avatar_image = gym_manager.avatar_image;
     },
     newModal(isAddUser) {
       this.isAddUser = isAddUser;

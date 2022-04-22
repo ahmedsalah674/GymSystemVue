@@ -19,6 +19,9 @@ import editCityManager from "@/views/components/editCityManager.vue";
 import CityTable from "@/views/components/CitiesTable.vue";
 import editTrainingSession from "@/views/components/editTrainingSession.vue";
 import Packages from "@/views/components/Packages.vue";
+import GymsTable from "@/views/components/gymTables.vue";
+import editGym from "@/views/components/editGym.vue";
+import addGym from "@/views/components/addGym.vue";
 
 const routes = [{
         path: "/",
@@ -40,6 +43,21 @@ const routes = [{
         path: "/cities",
         name: "Cities",
         component: CityTable,
+    },
+    {
+        path: "/gyms",
+        name: "Gyms",
+        component: GymsTable,
+    },
+    {
+        path: "/gyms/:id/edit",
+        name: "editGyms",
+        component: editGym,
+    },
+    {
+        path: "/gyms/create",
+        name: "addGym",
+        component: addGym,
     },
     {
         path: "/citymanagers/create",

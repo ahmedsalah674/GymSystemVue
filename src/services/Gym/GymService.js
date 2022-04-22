@@ -7,11 +7,18 @@ class GymService {
   get(id) {
     return http.get(`/gyms/${id}`);
   }
-  create(data, config) {
-    return http.post("/gyms", data, config);
+  removeManager(data) {
+    return http.post(`gym-remove-manager`, data);
   }
-  update(id, data , config) {
-    return http.post(`/gyms/${id}/update`, data , config);
+  addManager(data) {
+    return http.post(`gym-add-manager`, data);
+  }
+  create(data) {
+    console.log(data);
+    return http.post("/gyms", data);
+  }
+  update(id, data) {
+    return http.post(`/gyms/${id}/update`, data);
   }
   delete(id) {
     return http.delete(`/gyms/${id}`);

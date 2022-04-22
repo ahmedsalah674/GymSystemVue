@@ -12,25 +12,21 @@
         <table class="table mb-0">
           <thead>
             <tr>
-              <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">City Name</th>
-              <th class=" text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+              <th class=" text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">City Name</th>
+              <th class=" text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Edit</th>
+              <th class=" text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">delete</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="city in Cities" :key="city.id">
-              <td class="align-middle">
+              <td class="text-center align-middle">
                 {{ city.name }}
               </td>
               <td class="align-middle text-center">
-                <a href="#" style="color: blue" @click.prevent="editModal(city)"
-                >
-                  <i class="fa fa-edit blue"></i>
-                </a>
+                <i class="fa fa-edit text-info cursor-pointor" @click.prevent="editModal(city)"/>
               </td>
               <td class="align-middle text-center">
-                <a href="#" @click="deleteCity(city.id)" style="color: red">
-                  <i class="fa fa-trash red"></i>
-                </a>
+                <i class="fa fa-trash text-danger cursor-pointor" @click="deleteCity(city.id)"/>
               </td>
             </tr>
           </tbody>
