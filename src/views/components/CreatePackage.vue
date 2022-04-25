@@ -24,56 +24,38 @@
         </div>
 
         <div class="mb-3 form-group">
-          <label for="day" class="form-label">Date</label>
+          <label for="name" class="form-label">Price</label>
           <input
-            v-model="form.session_date"
-            type="date"
+            v-model="form.price"
+            type="number"
+            min="1"
+            step="any"
             class="form-control"
-            id="day"
-            name="day"
-            placeholder="day"
-            :class="{ 'is-invalid': errors.day }"
+            id="name"
+            name="name"
+            :class="{ 'is-invalid': errors.price }"
           />
-          <span v-if="errors.day">{{ errors.day }}</span>
+          <span v-if="errors.price">
+            {{ errors.price }}
+          </span>
         </div>
 
         <div class="mb-3 form-group">
-          <label for="start_time" class="form-label">Start time</label>
+          <label for="name" class="form-label">Session Count</label>
           <input
-            type="time"
-            name="start_time"
+            v-model="form.session_count"
+            type="number"
+            min="1"
+            step="1"
+            max="1460"
             class="form-control"
-            id="start_time"
-            v-model="form.start_time"
-            :class="{ 'is-invalid': errors.start_time }"
+            id="name"
+            name="name"
+            :class="{ 'is-invalid': errors.session_count }"
           />
-          <span v-if="errors.start_time">{{ errors.start_time }}</span>
-        </div>
-
-        <div class="mb-3 form-group">
-          <label for="finish_time" class="form-label">Finish time</label>
-          <input
-            type="time"
-            name="end_time"
-            class="form-control"
-            id="end_time"
-            v-model="form.end_time"
-            :class="{ 'is-invalid': errors.end_time }"
-          />
-          <span v-if="errors.end_time">{{ errors.end_time }}</span>
-        </div>
-
-        <div class="mb-3 form-group">
-          <label for="coaches" class="form-label">Select Coaches</label>
-          <Multiselect
-            v-model="form.coaches"
-            mode="tags"
-            :searchable="true"
-            :create-option="true"
-            :close-on-select="false"
-            :options="coaches"
-          ></Multiselect>
-          <span v-if="errors.coaches">{{ errors.coaches }}</span>
+          <span v-if="errors.session_count">
+            {{ errors.session_count }}
+          </span>
         </div>
 
         <div class="mb-3 form-group">
@@ -86,23 +68,40 @@
           </select>
           <span v-if="errors.gyms">{{ errors.gyms }}</span>
         </div>
-        <div class="text-center">
-        <button type="submit" class="btn btn-primary">Add</button>
+        <div class="mb-3 form-group">
+          <label for="name" class="form-label ">Discount</label>
+          <input
+            v-model="form.discount"
+            type="number"
+            min="1"
+            step="any"
+            max="100"
+            class="form-control"
+            id="name"
+            name="name"
+            :class="{ 'is-invalid': errors.discount }"
+          />
+          <span v-if="errors.discount">
+            {{ errors.discount }}
+          </span>
         </div>
+
+        <div class="text-center">
+        <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+
       </form>
   </div>
 </div>
 </template>
 <script>
-// eslint-disable prettier/prettier
+/*eslint-disable prettier/prettier*/
 // import VsudAvatar from "@/components/VsudAvatar.vue";
 // import VsudBadge from "@/components/VsudBadge.vue";
 // import { Form, Field, ErrorMessage } from "vee-validate";]
-import TrainingSessionsService from "../../services/GymManagers/TrainingSessionService";
-import CoachService from "../../services/Coaches/CoachesService";
+import PackagesService from "../../services/GymManagers/PackagesService";
 import GymService from "../../services/Gym/GymService";
 import Swal from "sweetalert2";
-import Multiselect from "@vueform/multiselect";
 const Toast = Swal.mixin({
   toast: true,
   position: "top-end",
@@ -115,36 +114,27 @@ const Toast = Swal.mixin({
   },
 });
 export default {
-  name: "add/edit-session",
-  components: {
-    Multiselect,
-  },
+  name: "Create Package",
   data() {
     return {
-      value: null,
-      editmode: false,
       errors: {},
       // token: "2|6kfynCaHfYggdULaqx7Kl5NEwvWIi465094zlUCF",
       form: {
         name: "",
-        session_date: "",
-        start_time: "",
-        end_time: "",
-        coaches: [],
+        price: "",
+        session_count: "",
         gym_id: "",
+        discount: null,
       },
-      coaches: [],
       gyms: [],
     };
   },
   methods: {
     submit: function () {
       this.formValidation();
-      // console.log(Object.keys(this.errors).length);
-      // console.log(this.form.gym_id);
       console.log(this.coaches);
       if (!(Object.keys(this.errors).length > 0)) {
-        TrainingSessionsService.create(this.form)
+        PackagesService.create(this.form)
           .then((response) => {
             if (response.data.error) {
               this.errors = response.data.error;
@@ -155,16 +145,15 @@ export default {
               });
               this.form = {
                 name: "",
-                session_date: "",
-                start_time: "",
-                end_time: "",
-                coaches: [],
+                price: "",
+                session_count: "",
                 gym_id: "",
+                discount: null,
               };
               this.errors = [];
               this.$refs["form"].reset();
               setTimeout(() => {
-                this.$router.push("/TrainingSessions");
+                this.$router.push("/");
               }, 3000);
             }
           })
@@ -178,46 +167,22 @@ export default {
     formValidation: function () {
       this.errors = {};
       for (const key in this.form) {
-        if (key != "id" && this.form[key] === "") {
-          this.errors[key] = "This " + key + "field is required";
+        if (!this.form[key]=="discount" && this.form[key] === "") {
+          this.errors[key] = "This " + key + " field is required";
         }
       }
-    },
-    getCoaches: function () {
-      CoachService.getAll()
-        .then((response) => {
-          this.coaches = this.formatCoaches(response.data);
-          console.log("hna");
-          console.log(this.coaches);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    formatCoaches: function (coaches) {
-      return coaches.map((coach) => {
-        return {
-          value: coach.id,
-          label: coach.name,
-        };
-      });
     },
     getGyms: function () {
       GymService.getAll()
         .then((response) => {
-          this.gyms = response.data.data;
+          this.gyms = response.data;
         })
         .catch((e) => {
           console.log(e);
         });
     },
-    functionz: function (e) {
-      console.log(e.target.value);
-      this.form.coaches.push(e.target.value);
-    },
   },
   created() {
-    this.getCoaches();
     this.getGyms();
   },
 };

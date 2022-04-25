@@ -9,6 +9,7 @@ import Rtl from "@/views/Rtl.vue";
 import SignIn from "@/views/SignIn.vue";
 import GymMembers from "@/views/GymMembers.vue";
 import GymManagers from "@/views/GymManagers.vue";
+import Attendances from "@/views/Attendances.vue";
 import TrainingSessions from "@/views/TrainingSessions.vue";
 import addTrainingSessions from "@/views/components/addTrainingSessions.vue";
 import CityManagers from "@/views/CityManagers.vue";
@@ -19,6 +20,11 @@ import CityTable from "@/views/components/CitiesTable.vue";
 import editTrainingSession from "@/views/components/editTrainingSession.vue";
 import Swal from "sweetalert2";
 import store from '../store'
+import Packages from "@/views/components/Packages.vue";
+import GymsTable from "@/views/components/gymTables.vue";
+import editGym from "@/views/components/editGym.vue";
+import addGym from "@/views/components/addGym.vue";
+import Revenue from "@/views/Revenue.vue";
 
 const routes = [{
         path: "/",
@@ -76,6 +82,21 @@ const routes = [{
         }
     },
     {
+        path: "/gyms",
+        name: "Gyms",
+        component: GymsTable,
+    },
+    {
+        path: "/gyms/:id/edit",
+        name: "editGyms",
+        component: editGym,
+    },
+    {
+        path: "/gyms/create",
+        name: "addGym",
+        component: addGym,
+    },
+    {
         path: "/citymanagers/create",
         name: "addCityManager",
         component: addCityManager,
@@ -105,6 +126,16 @@ const routes = [{
         }
     },
     {
+        path: "/Attendances",
+        name: "Attendances",
+        component: Attendances,
+    },
+    {
+        path: "/revenue",
+        name: "Revenue",
+        component: Revenue,
+    },
+    {
         path: "/TrainingSessions",
         name: "TrainingSessions",
         component: TrainingSessions,
@@ -116,7 +147,7 @@ const routes = [{
     },
     {
         path: "/TrainingSessions/create",
-        name: "addTrainingSession",
+        name: "AddTrainingSession",
         component: addTrainingSessions,
         meta: {
             requiresAuth:true,
@@ -137,6 +168,11 @@ const routes = [{
         }
     },
 
+    {
+        path: "/Packages",
+        name: "Packages",
+        component: Packages,
+    },
     {
         path: "/tables",
         name: "Tables",

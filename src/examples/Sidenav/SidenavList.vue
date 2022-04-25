@@ -1,3 +1,4 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div
     class="w-auto h-auto collapse navbar-collapse max-height-vh-100 h-100"
@@ -113,8 +114,7 @@
             <icon name="sign-up" />
           </template>
         </sidenav-collapse>
-      </li>
-      -->
+      </li> -->
     </ul>
   </div>
   <div class="pt-3 mx-3 mt-3 sidenav-footer">
@@ -135,6 +135,7 @@
   </div>
 </template>
 <script>
+/* eslint-disable prettier/prettier */
 import Icon from "@/components/Icon.vue";
 import SidenavCollapse from "./SidenavCollapse.vue";
 // import SidenavCard from "./SidenavCard.vue";
