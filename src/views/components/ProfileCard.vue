@@ -19,20 +19,17 @@
     </div>
     <div class="p-3 card-body">
       <p class="text-sm">
-        Hi, I’m Alec Thompson, Decisions: If you can’t decide, the answer is no.
+        Hi, I’m {{name}}, Decisions: If you can’t decide, the answer is no.
         If two equally difficult paths, choose the one more painful in the short
         term (pain avoidance is creating an illusion of equality).
       </p>
       <hr class="my-4 horizontal gray-light" />
       <ul class="list-group">
         <li class="pt-0 text-sm border-0 list-group-item ps-0">
-          <strong class="text-dark">Full Name:</strong> &nbsp; Alec M. Thompson
+          <strong class="text-dark">Full Name:</strong> &nbsp; {{name}}
         </li>
         <li class="text-sm border-0 list-group-item ps-0">
-          <strong class="text-dark">Mobile:</strong> &nbsp; (44) 123 1234 123
-        </li>
-        <li class="text-sm border-0 list-group-item ps-0">
-          <strong class="text-dark">Email:</strong> &nbsp; alecthompson@mail.com
+          <strong class="text-dark">Email:</strong> &nbsp; {{email}}
         </li>
         <li class="text-sm border-0 list-group-item ps-0">
           <strong class="text-dark">Location:</strong> &nbsp; USA
@@ -65,6 +62,11 @@
 
 <script>
 export default {
-  name: "profile-card",
+    name: "profile-card",
+      props:{
+        name:String ,
+        email:String
+      },
+    
 };
 </script>

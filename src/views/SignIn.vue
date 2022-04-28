@@ -24,18 +24,40 @@
                   <p class="mb-0">Enter your email and password to sign in</p>
                 </div>
                 <div class="card-body">
-                  <form role="form" class="text-start">
-                    <label>Email</label>
-                    <vsud-input type="email" placeholder="Email" name="email" />
-                    <label>Password</label>
-                    <vsud-input
-                      type="password"
-                      placeholder="Password"
-                      name="password"
-                    />
+                  <form role="form" class="text-start" @submit.prevent="login()">
+                     <div class="mb-3">
+                      <label for="inputEmail" class="form-label">Email</label>
+                      <input 
+                      v-model="email"
+                       :class="{ 'is-invalid': errors.email }" 
+                       type="email" 
+                       class="form-control"
+                        id="inputEmail">
+                      <span v-if="errors.email" class="text-danger">{{
+                      errors.email[0]
+                     }}</span>  
+                    </div>
+  
+                    <div class="mb-3">
+                      <label for="inputPassword" class="form-label">Password</label>
+                      <input 
+                      v-model="password"
+                       :class="{ 'is-invalid': errors.password }"
+                       type="password"
+                       class="form-control" 
+                       id="inputPassword"
+                       >
+                      <span v-if="errors.password" class="text-danger">{{
+                      errors.password[0]
+                     }}</span>
+                    </div>
                     <vsud-switch id="rememberMe" checked>
                       Remember me
                     </vsud-switch>
+                     <p v-if="errors.authError" class="text-danger">{{
+                      errors.authError[0]
+                     }}</p>
+
                     <div class="text-center">
                       <vsud-button
                         class="my-4 mb-2"
@@ -83,9 +105,10 @@
 </template>
 
 <script>
+import AuthService from "../services/Auth/AuthService";
+
 import Navbar from "@/examples/PageLayout/Navbar.vue";
 import AppFooter from "@/examples/PageLayout/Footer.vue";
-import VsudInput from "@/components/VsudInput.vue";
 import VsudSwitch from "@/components/VsudSwitch.vue";
 import VsudButton from "@/components/VsudButton.vue";
 const body = document.getElementsByTagName("body")[0];
@@ -95,11 +118,63 @@ export default {
   components: {
     Navbar,
     AppFooter,
-    VsudInput,
     VsudSwitch,
     VsudButton,
   },
+  data() {
+      return {
+        email:"",
+        password:"",
+        errors:{}
+      }
+  },
+  methods:{
+    login(){
+      this.FrontVlidation();
+    
+      if (!Object.keys(this.errors).length) {
+      AuthService.login(this.email,this.password).then((res)=>{
+         if (res.data.status == "error") {
+              this.errors = res.data.errors;
+              console.log(this.errors);
+            } else if (res.data.status == "success") {
+                localStorage["userToken"]=res.data.token;
+                this.$store.commit('setUserData', res.data.user)
+               this.$router.push("/profile");
+            }
+       
+      }).catch(
+        err=>{console.log(err)}
+      );
+      }
+    },
+    FrontVlidation() {
+      this.errors = {};
+   
+      if (!this.email) {
+        this.errors["email"] = ["email is required"];
+      } else if (!this.validEmail(this.email)) {
+        this.errors["email"] = ["email should be a valid one"];
+      }
+    
+      if (!this.password) {
+        this.errors["password"] = ["password is required"];
+      } else if (this.password.length < 8) {
+        this.errors["password"] = ["password must be at least 8 characters"];
+      }
+   
+    },
+    validEmail: function (email) {
+      var emailRegExp =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return emailRegExp.test(email);
+    },
+  }
+  ,
   beforeMount() {
+    if (this.$store.getters.isLoggedIn) {
+      this.$router.push("/profile");
+    }
     this.$store.state.hideConfigButton = true;
     this.$store.state.showNavbar = false;
     this.$store.state.showSidenav = false;
